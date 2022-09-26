@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "292588832316",
+    "project_id": "grocerydash-merchant",
+    "storage_bucket": "grocerydash-merchant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292588832316:android:eca9b03e6bbf7ee428e539",
+        "android_client_info": {
+          "package_name": "com.grocerydash.merchant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292588832316-k17dh086pnpk7lrac63ie2ujhdaja58s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbbHkSubG4IKX1WgFFoyCOxhBEdy4kwaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292588832316-k17dh086pnpk7lrac63ie2ujhdaja58s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292588832316:android:c78425b0603ed11b28e539",
+        "android_client_info": {
+          "package_name": "com.grocerydash.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292588832316-k17dh086pnpk7lrac63ie2ujhdaja58s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbbHkSubG4IKX1WgFFoyCOxhBEdy4kwaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292588832316-k17dh086pnpk7lrac63ie2ujhdaja58s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GroceryDashUser</string>
+    <string name="popular_products">Popular Products</string>
+    <string name="see_all">See All</string>
+    <string name="menu">Menu</string>
+    <string name="cart">Cart</string>
 </resources>
