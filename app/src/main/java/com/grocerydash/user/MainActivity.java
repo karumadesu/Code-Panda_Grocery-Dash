@@ -26,12 +26,14 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
     private ImageButton imageButtonMenu, imageButtonCart;
-    private RecyclerView recyclerViewPopularProducts;
+    private RecyclerView recyclerViewPopularProducts, recyclerViewProductCategories;
     private PopularProductsAdapter popularProductsAdapter;
-    private TextView textSeeAllPopularProducts;
-    private LinearLayoutManager layout;
+    private ProductCategoriesAdapter productCategoriesAdapter;
+    private TextView textSeeAllPopularProducts, textSeeAllProductCategories;
+    private LinearLayoutManager layout1, layout2;
 
     ArrayList<ProductInformation> productInformation;
+    ArrayList<ProductCategories> productCategories;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -41,20 +43,30 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         productInformation = new ArrayList<>();
+        productCategories = new ArrayList<>();
 
-        layout = new LinearLayoutManager(this);
-        layout.setOrientation(RecyclerView.HORIZONTAL);
+        layout1 = new LinearLayoutManager(this);
+        layout1.setOrientation(RecyclerView.HORIZONTAL);
+
+        layout2 = new LinearLayoutManager(this);
+        layout2.setOrientation(RecyclerView.HORIZONTAL);
 
         popularProductsAdapter = new PopularProductsAdapter(this, productInformation);
+        productCategoriesAdapter = new ProductCategoriesAdapter(this, productCategories);
 
         recyclerViewPopularProducts = findViewById(R.id.recyclerview_popularProducts);
-        recyclerViewPopularProducts.setLayoutManager(layout);
+        recyclerViewPopularProducts.setLayoutManager(layout1);
         recyclerViewPopularProducts.setAdapter(popularProductsAdapter);
 
+        recyclerViewProductCategories = findViewById(R.id.recyclerview_productCategory);
+        recyclerViewProductCategories.setLayoutManager(layout2);
+        recyclerViewProductCategories.setAdapter(productCategoriesAdapter);
+
         setUpPopularProductModels();
+        setUpProductCategoryModels();
 
         imageButtonMenu = findViewById(R.id.image_button_menu);
-        imageButtonMenu.setOnClickListener(new View.OnClickListener() {
+        imageButtonMenu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
@@ -62,7 +74,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
         imageButtonCart = findViewById(R.id.image_button_cart);
-        imageButtonCart.setOnClickListener(new View.OnClickListener() {
+        imageButtonCart.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
@@ -70,7 +82,15 @@ public class MainActivity extends AppCompatActivity{
         });
 
         textSeeAllPopularProducts = findViewById(R.id.text_see_all_popular);
-        textSeeAllPopularProducts.setOnClickListener(new View.OnClickListener() {
+        textSeeAllPopularProducts.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        textSeeAllProductCategories = findViewById(R.id.text_see_all_categories);
+        textSeeAllPopularProducts.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
@@ -95,6 +115,14 @@ public class MainActivity extends AppCompatActivity{
                 }
             })
             .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
+    }
 
+    private void setUpProductCategoryModels(){
+        String[] productCategoryNames = getResources().getStringArray(R.array.category_names);
+
+        for(int i = 0; i < productCategoryNames.length; i++){
+            productCategories.add(new ProductCategories(productCategoryNames[i], R.drawable.baseline_add_circle_black_24));
+        }
+        productCategoriesAdapter.notifyDataSetChanged();
     }
 }

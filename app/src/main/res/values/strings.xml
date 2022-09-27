@@ -5,4 +5,67 @@
     <string name="menu">Menu</string>
     <string name="cart">Cart</string>
     <string name="product_categories">Product Categories</string>
+    
+    <string-array name="category_names">
+        <item>Meat</item>
+        <item>Fish</item>
+        <item>Fruits</item>
+        <item>Vegetables</item>
+        <item>Beverages</item>
+        <item>Appliances</item>
+        <item>Food Service Center</item>
+        <item>Bread Spreads</item>
+        <item>Cupcakes</item>
+        <item>Pastries</item>
+        <item>Picnic Items</item>
+        <item>Tissue</item>
+        <item>Shampoo</item>
+        <item>Hair Conditioner</item>
+        <item>Hair Treatment</item>
+        <item>Styling Aids</item>
+        <item>Facial Cream</item>
+        <item>Facial Moisturizer</item>
+        <item>Facial Cleanser</item>
+        <item>Mouthwash</item>
+        <item>Toothpaste</item>
+        <item>Lotion</item>
+        <item>Cologne</item>
+        <item>Baby Oil and Powder</item>
+        <item>Deodorant</item>
+        <item>Bath Soap</item>
+        <item>Sanitary Napkins</item>
+        <item>Home Remedies</item>
+        <item>Pet Food</item>
+        <item>Air Freshener</item>
+        <item>Insecticides</item>
+        <item>Liquid Detergent</item>
+        <item>Laundry Detergent</item>
+        <item>Fabric Conditioner</item>
+        <item>Bottled Water</item>
+        <item>Powdered Juices</item>
+        <item>Softdrinks</item>
+        <item>Iced Tea</item>
+        <item>Juices</item>
+        <item>Biscuits</item>
+        <item>Cookies</item>
+        <item>Wafers</item>
+        <item>Native Snacks</item>
+        <item>Native Biscuits</item>
+        <item>Crackers</item>
+        <item>Corn Chips</item>
+        <item>Potato Snacks</item>
+        <item>Chocolates</item>
+        <item>Candies</item>
+        <item>Canned Vegetables</item>
+        <item>Canned Fruits</item>
+        <item>Canned Meat</item>
+        <item>Canned Seafood</item>
+        <item>Corned Beef</item>
+        <item>Spaghetti Sauce</item>
+        <item>Soy Sauce</item>
+        <item>Vinegar</item>
+        <item>Instant Noodles</item>
+        <item>Pancit Canton</item>
+        <item>Pasta</item>
+    </string-array>
 </resources>

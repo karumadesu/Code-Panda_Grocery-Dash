@@ -17,39 +17,37 @@ public class ProductInformation{
         this.productAisleNumber = productAisleNumber;
     }
 
-    public ProductInformation(){
+    public ProductInformation(){}
 
-    }
-
-    public String getProductCategory() {
+    public String getProductCategory(){
         return productCategory;
     }
 
-    public String getProductImageUrl() {
+    public String getProductImageUrl(){
         return productImageUrl;
     }
 
-    public String getProductName() {
+    public String getProductName(){
         return productName;
     }
 
-    public String getProductPrice() {
+    public String getProductPrice(){
         return productPrice;
     }
 
-    public String getProductShelfNumber() {
+    public String getProductShelfNumber(){
         return productShelfNumber;
     }
 
-    public int getProductId() {
+    public int getProductId(){
         return productId;
     }
 
-    public int getProductInStock() {
+    public int getProductInStock(){
         return productInStock;
     }
 
-    public int getProductAisleNumber() {
+    public int getProductAisleNumber(){
         return productAisleNumber;
     }
 }
