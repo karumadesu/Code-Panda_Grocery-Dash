@@ -8,31 +8,50 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
-
     private ImageButton imageButtonMenu, imageButtonCart;
     private RecyclerView recyclerViewPopularProducts;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private PopularProductsAdapter popularProductsAdapter;
+    private TextView textSeeAllPopularProducts;
+    private LinearLayoutManager layout;
 
-    ArrayList<PopularProducts> PopularProducts = new ArrayList<>();
+    ArrayList<ProductInformation> productInformation;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        productInformation = new ArrayList<>();
+
+        layout = new LinearLayoutManager(this);
+        layout.setOrientation(RecyclerView.HORIZONTAL);
+
+        popularProductsAdapter = new PopularProductsAdapter(this, productInformation);
+
         recyclerViewPopularProducts = findViewById(R.id.recyclerview_popularProducts);
-        recyclerViewPopularProducts.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewPopularProducts.setLayoutManager(layout);
+        recyclerViewPopularProducts.setAdapter(popularProductsAdapter);
+
+        setUpPopularProductModels();
 
         imageButtonMenu = findViewById(R.id.image_button_menu);
         imageButtonMenu.setOnClickListener(new View.OnClickListener() {
@@ -50,30 +69,32 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        // Create a new user with a first and last name
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+        textSeeAllPopularProducts = findViewById(R.id.text_see_all_popular);
+        textSeeAllPopularProducts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error adding document", e);
-                    }
-                });
-
+            }
+        });
     }
 
     private void setUpPopularProductModels(){
+        CollectionReference popularProducts = db.collection("BranchName_Products");
+        popularProducts.whereEqualTo("productInStock", 1).get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                    for(DocumentSnapshot d : list){
+                        ProductInformation info = d.toObject(ProductInformation.class);
+                        productInformation.add(info);
+                    }
+                    popularProductsAdapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "No products found.", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
 
     }
 }
