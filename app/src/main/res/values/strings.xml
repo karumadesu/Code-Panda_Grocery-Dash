@@ -5,7 +5,7 @@
     <string name="menu">Menu</string>
     <string name="cart">Cart</string>
     <string name="product_categories">Product Categories</string>
-    
+
     <string-array name="category_names">
         <item>Meat</item>
         <item>Fish</item>
@@ -68,4 +68,6 @@
         <item>Pancit Canton</item>
         <item>Pasta</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

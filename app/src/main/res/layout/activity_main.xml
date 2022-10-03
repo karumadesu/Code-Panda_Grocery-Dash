@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_menu" >
 
         <SearchView
-            android:id="@+id/search_view"
+            android:id="@+id/searchview_searchProducts"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_28sdp"
 
@@ -78,107 +78,12 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
-        android:id="@+id/scrollview"
+    <FrameLayout
+        android:id="@+id/frame_home_fragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clipToPadding="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/toolbar_search"
-        >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/text_popular_products"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15ssp"
-                android:layout_marginBottom="@dimen/_5ssp"
-                android:fontFamily="@font/arimo"
-                android:text="@string/popular_products"
-                android:textColor="@color/dark_gray"
-                android:textSize="@dimen/_20ssp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/recyclerview_popularProducts"
-                app:layout_constraintLeft_toLeftOf="parent" />
-
-            <TextView
-                android:id="@+id/text_see_all_popular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_15ssp"
-                android:layout_marginBottom="@dimen/_10ssp"
-                android:fontFamily="@font/arimo"
-                android:text="@string/see_all"
-                android:textColor="@color/orange"
-                android:textSize="@dimen/_10ssp"
-                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_black_18"
-                app:drawableTint="@color/orange"
-                app:layout_constraintBottom_toTopOf="@id/recyclerview_popularProducts"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:ignore="TextContrastCheck" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_popularProducts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/text_product_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15ssp"
-                android:layout_marginBottom="@dimen/_5ssp"
-                android:fontFamily="@font/arimo"
-                android:text="@string/product_categories"
-                android:textColor="@color/dark_gray"
-                android:textSize="@dimen/_15ssp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/recyclerview_productCategory"
-                app:layout_constraintLeft_toLeftOf="parent" />
-
-            <TextView
-                android:id="@+id/text_see_all_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_15ssp"
-                android:layout_marginBottom="@dimen/_5ssp"
-                android:fontFamily="@font/arimo"
-                android:text="@string/see_all"
-                android:textColor="@color/orange"
-                android:textSize="@dimen/_10ssp"
-                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_black_18"
-                app:drawableTint="@color/orange"
-                app:layout_constraintBottom_toTopOf="@id/recyclerview_productCategory"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:ignore="TextContrastCheck" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_productCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_40sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerview_popularProducts" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
