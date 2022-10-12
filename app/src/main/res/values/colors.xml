@@ -12,4 +12,6 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="orange">#FFFF6347</color>
     <color name="light_gray_2">#FFDDDDDD</color>
+    <color name="off_white">#FFEFEFEF</color>
+    <color name="red">#FFFF0000</color>
 </resources>

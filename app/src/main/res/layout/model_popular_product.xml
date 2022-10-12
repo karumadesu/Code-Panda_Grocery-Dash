@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_4sdp"
+    android:layout_marginEnd="@dimen/_4sdp"
+    android:layout_marginBottom="@dimen/_8sdp"
+    app:cardCornerRadius="8dp" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/light_gray_2" >
+
+        <ImageView
+            android:id="@+id/imageview_popular_product_image"
+            android:layout_width="@dimen/_136sdp"
+            android:layout_height="@dimen/_136sdp"
+            android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/text_popular_product_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_36sdp"
+            android:fontFamily="@font/arimo"
+            android:text="@string/dummy_name"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_gray"
+            android:padding="@dimen/_4ssp"
+            android:ellipsize="end"
+            android:maxLines="2" />
+
+        <TextView
+            android:id="@+id/text_popular_product_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arimo"
+            android:text="@string/dummy_price"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/orange"
+            android:paddingLeft="@dimen/_5ssp"
+            android:paddingBottom="@dimen/_5ssp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_17sdp"
+        android:background="@drawable/bg_rounded_tag"
+        android:backgroundTint="@color/dark_gray"
+        android:layout_marginTop="@dimen/_8sdp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HOT"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:fontFamily="@font/arimo"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_4sdp" />
+
+    <ImageView
+        android:layout_width="@dimen/_11sdp"
+        android:layout_height="@dimen/_11sdp"
+        android:src="@drawable/baseline_whatshot_white_18"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_30sdp"/>
+
+</androidx.cardview.widget.CardView>

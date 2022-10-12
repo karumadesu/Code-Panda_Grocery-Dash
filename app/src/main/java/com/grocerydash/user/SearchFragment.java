@@ -9,25 +9,20 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.util.List;
-import java.util.Locale;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import javax.annotation.Nullable;
 
 public class SearchFragment extends Fragment{
-    private RecyclerView recyclerViewSearchProducts;
-    private SearchProductsAdapter searchProductsAdapter;
-    private LinearLayoutManager layout;
+    TextView textViewNoProducts;
+    ImageView easterEgg;
+    RecyclerView recyclerViewSearchProducts;
+    LinearLayoutManager layout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
@@ -35,32 +30,41 @@ public class SearchFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity)getActivity()).productSearch.clear();
+        ((MainActivity)getActivity()).filteredProductList.clear();
 
         layout = new LinearLayoutManager(getActivity());
         layout.setOrientation(RecyclerView.VERTICAL);
 
-        searchProductsAdapter = new SearchProductsAdapter(getActivity(), ((MainActivity)getActivity()).productSearch);
-
         recyclerViewSearchProducts = view.findViewById(R.id.recyclerview_searchProducts);
         recyclerViewSearchProducts.setLayoutManager(layout);
-        recyclerViewSearchProducts.setAdapter(searchProductsAdapter);
+        recyclerViewSearchProducts.setAdapter(((MainActivity)getActivity()).filteredProductsAdapter);
 
-        setUpProductSearchModels();
+        textViewNoProducts = view.findViewById(R.id.text_no_product_found);
+        easterEgg = view.findViewById(R.id.easter_egg);
+
+        setUpFilteredList();
     }
 
-    private void setUpProductSearchModels(){
-        for(ProductInformation i: ((MainActivity)getActivity()).productInformation){
-            if(i.getProductName().toLowerCase().contains(((MainActivity)getActivity()).searchString.toLowerCase())){
-                ((MainActivity)getActivity()).productSearch.add(i);
+    private void setUpFilteredList(){
+        for(ProductInformationClass i: ((MainActivity)getActivity()).productList){
+            if(((MainActivity)getActivity()).searchString.toLowerCase().equals("matlab")){
+                recyclerViewSearchProducts.setVisibility(View.GONE);
+                easterEgg.setVisibility(View.VISIBLE);
+            }
+            else if(i.getProductName().toLowerCase().contains(((MainActivity)getActivity()).searchString.toLowerCase())){
+                ((MainActivity)getActivity()).filteredProductList.add(i);
             }
         }
 
-        if(((MainActivity) getActivity()).productSearch.isEmpty()){
-            Toast.makeText(getActivity(), "No products found.", Toast.LENGTH_SHORT).show();
+        if(((MainActivity)getActivity()).filteredProductList.isEmpty()){
+            String[] kaomojis = getResources().getStringArray(R.array.kaomojis);
+
+            textViewNoProducts.setText("\n\n" + kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found with '" + ((MainActivity)getActivity()).searchString + "'");
+            textViewNoProducts.setVisibility(View.VISIBLE);
+            recyclerViewSearchProducts.setVisibility(View.GONE);
         }
         else{
-            searchProductsAdapter.setProductFilter(((MainActivity) getActivity()).productSearch);
+            ((MainActivity)getActivity()).filteredProductsAdapter.setProductFilter(((MainActivity)getActivity()).filteredProductList);
         }
     }
 }

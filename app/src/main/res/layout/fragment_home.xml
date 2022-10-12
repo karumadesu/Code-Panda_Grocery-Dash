@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HomeFragment" >
+    android:layout_height="wrap_content"
+    tools:context=".HomeFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,7 +23,7 @@
                 android:layout_marginStart="@dimen/_15ssp"
                 android:layout_marginBottom="@dimen/_5ssp"
                 android:fontFamily="@font/arimo"
-                android:text="@string/popular_products"
+                android:text="@string/title_popular_products"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/_20ssp"
                 android:textStyle="bold"
@@ -48,12 +48,12 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_popularProducts"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_50sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="@dimen/_32sdp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:itemCount="4"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -72,36 +72,23 @@
                 app:layout_constraintBottom_toTopOf="@id/recyclerview_productCategory"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
-            <TextView
-                android:id="@+id/text_see_all_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_15ssp"
-                android:layout_marginBottom="@dimen/_5ssp"
-                android:fontFamily="@font/arimo"
-                android:text="@string/see_all"
-                android:textColor="@color/orange"
-                android:textSize="@dimen/_10ssp"
-                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_black_18"
-                app:drawableTint="@color/orange"
-                app:layout_constraintBottom_toTopOf="@id/recyclerview_productCategory"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:ignore="TextContrastCheck" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_productCategory"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_40sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:itemCount="21"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerview_popularProducts" />
+                app:layout_constraintTop_toBottomOf="@id/recyclerview_popularProducts"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

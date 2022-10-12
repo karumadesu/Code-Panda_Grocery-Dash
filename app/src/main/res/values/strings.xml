@@ -1,73 +1,76 @@
 <resources>
-    <string name="app_name">GroceryDashUser</string>
-    <string name="popular_products">Popular Products</string>
+    <string name="app_name">Grocery Dash</string>
     <string name="see_all">See All</string>
-    <string name="menu">Menu</string>
+    <string name="logo">Logo</string>
     <string name="cart">Cart</string>
+    <string name="product_detail_located_at">Located at:</string>
+    <string name="product_detail_in_stock">In Stock</string>
+    <string name="product_detail_out_of_stock">Out of Stock</string>
     <string name="product_categories">Product Categories</string>
+    <string name="recommendation">You may also like…</string>
+    <string name="add_to_list_button">Add to List</string>
+    <string name="dummy_name">Product Name</string>
+    <string name="dummy_price">₱99.99</string>
+    <string name="root_directory"><u>Grocery Dash</u></string>
+
+    <string name="title_popular_products">Popular Products</string>
+    <string name="description_popular_products">Grab these before supplies run out!</string>
+
+    <string-array name="category_descriptions">
+        <item>We meat the highest standards!</item>
+        <item>Which one came first?</item>
+        <item>Freshest catch from the sea!</item>
+        <item>A fruit a day keeps the doctor away!</item>
+        <item>Freshly gathered vegetables, authentic and organic!</item>
+        <item>To keep your bones and minds strong!</item>
+        <item>Taste the goodness of Dairy Power!</item>
+        <item>Did you know that Deli is short for Delicatessen?</item>
+        <item>Quench yourself!</item>
+        <item>I guess a pack wasn\'t enough?</item>
+        <item>Too lazy to cook huh</item>
+        <item>brrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</item>
+        <item>Bags of happiness</item>
+        <item>Shouldn\'t we be worried of that 0.01% germ that remains?</item>
+        <item>Maybe your crush would finally look at you</item>
+        <item>Stop complaining, start cooking!</item>
+        <item>Quick and accessible food!</item>
+        <item>For your own humble abode!</item>
+        <item>If you like it fresh out of the oven!</item>
+        <item>Things for taking care of your little angel!</item>
+        <item>For your trusted companion!</item>
+    </string-array>
 
     <string-array name="category_names">
         <item>Meat</item>
-        <item>Fish</item>
+        <item>Poultry</item>
+        <item>Seafood</item>
         <item>Fruits</item>
         <item>Vegetables</item>
-        <item>Beverages</item>
-        <item>Appliances</item>
+        <item>Milk</item>
+        <item>Dairy</item>
+        <item>Deli</item>
+        <item>Beverage</item>
         <item>Food Service Center</item>
-        <item>Bread Spreads</item>
-        <item>Cupcakes</item>
-        <item>Pastries</item>
-        <item>Picnic Items</item>
-        <item>Tissue</item>
-        <item>Shampoo</item>
-        <item>Hair Conditioner</item>
-        <item>Hair Treatment</item>
-        <item>Styling Aids</item>
-        <item>Facial Cream</item>
-        <item>Facial Moisturizer</item>
-        <item>Facial Cleanser</item>
-        <item>Mouthwash</item>
-        <item>Toothpaste</item>
-        <item>Lotion</item>
-        <item>Cologne</item>
-        <item>Baby Oil and Powder</item>
-        <item>Deodorant</item>
-        <item>Bath Soap</item>
-        <item>Sanitary Napkins</item>
-        <item>Home Remedies</item>
-        <item>Pet Food</item>
-        <item>Air Freshener</item>
-        <item>Insecticides</item>
-        <item>Liquid Detergent</item>
-        <item>Laundry Detergent</item>
-        <item>Fabric Conditioner</item>
-        <item>Bottled Water</item>
-        <item>Powdered Juices</item>
-        <item>Softdrinks</item>
-        <item>Iced Tea</item>
-        <item>Juices</item>
-        <item>Biscuits</item>
-        <item>Cookies</item>
-        <item>Wafers</item>
-        <item>Native Snacks</item>
-        <item>Native Biscuits</item>
-        <item>Crackers</item>
-        <item>Corn Chips</item>
-        <item>Potato Snacks</item>
-        <item>Chocolates</item>
-        <item>Candies</item>
-        <item>Canned Vegetables</item>
-        <item>Canned Fruits</item>
-        <item>Canned Meat</item>
-        <item>Canned Seafood</item>
-        <item>Corned Beef</item>
-        <item>Spaghetti Sauce</item>
-        <item>Soy Sauce</item>
-        <item>Vinegar</item>
-        <item>Instant Noodles</item>
-        <item>Pancit Canton</item>
-        <item>Pasta</item>
+        <item>Canned Goods</item>
+        <item>Frozen Goods</item>
+        <item>Snacks</item>
+        <item>Cleaning Aids</item>
+        <item>Personal Care</item>
+        <item>Cooking Essentials</item>
+        <item>Pantry</item>
+        <item>Home</item>
+        <item>Baking Needs</item>
+        <item>Baby Needs</item>
+        <item>Pet Items</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="kaomojis">
+        <item>¯\\_(ツ)_/¯</item>
+        <item>( ･o･ )</item>
+        <item>▓▒░(°◡°)░▒▓</item>
+        <item>(×﹏×)</item>
+        <item>(ಥ﹏ಥ)</item>
+        <item>(・`ω´・)</item>
+        <item>(￣ヘ￣)</item>
+    </string-array>
 </resources>
