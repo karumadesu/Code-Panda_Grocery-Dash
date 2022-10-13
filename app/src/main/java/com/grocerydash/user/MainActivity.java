@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -162,9 +163,32 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
     private void setUpProductCategoryList(){
         String[] productCategoryNames = getResources().getStringArray(R.array.category_names);
+        int[] productCategoryImages = {
+                R.drawable.ic_meat,
+                R.drawable.ic_poultry,
+                R.drawable.ic_seafood,
+                R.drawable.ic_fruits,
+                R.drawable.ic_vegetables,
+                R.drawable.ic_pantry,
+                R.drawable.ic_snacks,
+                R.drawable.ic_milk,
+                R.drawable.ic_dairy,
+                R.drawable.ic_deli,
+                R.drawable.ic_beverage,
+                R.drawable.ic_foodservicecenter,
+                R.drawable.ic_cannedgoods,
+                R.drawable.ic_frozengoods,
+                R.drawable.ic_cookingessentials,
+                R.drawable.ic_bakingneeds,
+                R.drawable.ic_babyneeds,
+                R.drawable.ic_personalcare,
+                R.drawable.ic_home,
+                R.drawable.ic_cleaningaids,
+                R.drawable.ic_petitems
+        };
 
-        for(String productCategoryName : productCategoryNames){
-            productCategories.add(new ProductCategoryClass(productCategoryName, R.mipmap.ic_grocery_dash));
+        for(int i = 0; i < productCategoryNames.length; i++){
+            productCategories.add(new ProductCategoryClass(productCategoryNames[i], productCategoryImages[i]));
         }
         productCategoriesAdapter.notifyDataSetChanged();
     }

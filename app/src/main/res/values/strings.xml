@@ -46,6 +46,8 @@
         <item>Seafood</item>
         <item>Fruits</item>
         <item>Vegetables</item>
+        <item>Pantry</item>
+        <item>Snacks</item>
         <item>Milk</item>
         <item>Dairy</item>
         <item>Deli</item>
@@ -53,14 +55,12 @@
         <item>Food Service Center</item>
         <item>Canned Goods</item>
         <item>Frozen Goods</item>
-        <item>Snacks</item>
-        <item>Cleaning Aids</item>
-        <item>Personal Care</item>
         <item>Cooking Essentials</item>
-        <item>Pantry</item>
-        <item>Home</item>
         <item>Baking Needs</item>
         <item>Baby Needs</item>
+        <item>Personal Care</item>
+        <item>Home</item>
+        <item>Cleaning Aids</item>
         <item>Pet Items</item>
     </string-array>
 
