@@ -1,18 +1,20 @@
 <resources>
     <string name="app_name">Grocery Dash</string>
-    <string name="see_all">See All</string>
     <string name="logo">Logo</string>
     <string name="cart">Cart</string>
-    <string name="product_detail_located_at">Located at:</string>
+    <string name="see_all">See All</string>
     <string name="product_detail_in_stock">In Stock</string>
     <string name="product_detail_out_of_stock">Out of Stock</string>
     <string name="product_categories">Product Categories</string>
     <string name="recommendation">You may also like…</string>
-    <string name="add_to_list_button">Add to List</string>
+    <string name="add_to_list">Add to List</string>
     <string name="dummy_name">Product Name</string>
     <string name="dummy_price">₱99.99</string>
     <string name="root_directory"><u>Grocery Dash</u></string>
-
+    <string name="my_shopping_list">My Shopping List</string>
+    <string name="estimated_total_cost">Estimated Total Cost</string>
+    <string name="ready_to_go">Ready to Go?</string>
+    <string name="back">Back</string>
     <string name="title_popular_products">Popular Products</string>
     <string name="description_popular_products">Grab these before supplies run out!</string>
 
@@ -22,6 +24,8 @@
         <item>Freshest catch from the sea!</item>
         <item>A fruit a day keeps the doctor away!</item>
         <item>Freshly gathered vegetables, authentic and organic!</item>
+        <item>Quick and accessible food!</item>
+        <item>Bags of happiness</item>
         <item>To keep your bones and minds strong!</item>
         <item>Taste the goodness of Dairy Power!</item>
         <item>Did you know that Deli is short for Delicatessen?</item>
@@ -29,14 +33,12 @@
         <item>I guess a pack wasn\'t enough?</item>
         <item>Too lazy to cook huh</item>
         <item>brrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</item>
-        <item>Bags of happiness</item>
-        <item>Shouldn\'t we be worried of that 0.01% germ that remains?</item>
-        <item>Maybe your crush would finally look at you</item>
         <item>Stop complaining, start cooking!</item>
-        <item>Quick and accessible food!</item>
-        <item>For your own humble abode!</item>
         <item>If you like it fresh out of the oven!</item>
         <item>Things for taking care of your little angel!</item>
+        <item>Maybe your crush would finally look at you</item>
+        <item>For your own humble abode!</item>
+        <item>Shouldn\'t we be worried of that 0.01% germ that remains?</item>
         <item>For your trusted companion!</item>
     </string-array>
 

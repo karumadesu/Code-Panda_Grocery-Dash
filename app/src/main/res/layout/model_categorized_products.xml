@@ -53,7 +53,7 @@
         android:layout_height="@dimen/_17sdp"
         android:visibility="invisible"
         android:background="@drawable/bg_rounded_tag"
-        android:backgroundTint="@color/dark_gray"
+        android:backgroundTint="@color/orange"
         android:layout_marginTop="@dimen/_8sdp" />
 
     <TextView

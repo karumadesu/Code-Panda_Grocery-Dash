@@ -229,7 +229,7 @@
             android:background="@drawable/bg_white_rounded_rectangle"
             android:backgroundTint="@color/orange"
             android:fontFamily="@font/arimo"
-            android:text="@string/add_to_list_button"
+            android:text="@string/add_to_list"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/_14ssp"

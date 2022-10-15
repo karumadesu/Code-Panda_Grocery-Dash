@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
+        ((MainActivity)getActivity()).checkPopular = 0;
         layout1 = new GridLayoutManager(getActivity(), 2);
         layout2 = new GridLayoutManager(getActivity(), 3);
 
@@ -51,5 +52,20 @@ public class HomeFragment extends Fragment{
         recyclerViewProductCategories = view.findViewById(R.id.recyclerview_productCategory);
         recyclerViewProductCategories.setLayoutManager(layout2);
         recyclerViewProductCategories.setAdapter(((MainActivity)getActivity()).productCategoriesAdapter);
+
+        textSeeAllPopularProducts = view.findViewById(R.id.text_see_all_popular);
+        textSeeAllPopularProducts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).checkPopular = 1;
+
+                CategorizedProductsFragment categorizedProductsFragment = new CategorizedProductsFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frameLayout_withSearchView, categorizedProductsFragment)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 }

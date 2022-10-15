@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -22,17 +22,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CategoryInterface, ProductInterface, CategorizedProductInterface, FilteredProductInterface{
     String searchString, productCategory, productName;
-    int categoryNumber, productQuantity;
+    int categoryNumber, productQuantity, checkPopular;
     ArrayList<GroceryListClass> groceryList;
     ArrayList<ProductCategoryClass> productCategories;
     ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList;
-    ImageButton imageButtonMenu, imageButtonCart;
+    ImageButton imageButtonHome, imageButtonCart;
     SearchView searchViewSearchProducts;
     PopularProductsAdapter popularProductsAdapter;
     ProductCategoriesAdapter productCategoriesAdapter;
     FilteredProductsAdapter filteredProductsAdapter;
     CategorizedProductsAdapter categorizedProductsAdapter;
     FragmentManager fragmentManager;
+    FrameLayout layout;
     FirebaseFirestore db;
 
     @Override
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         productCategoriesAdapter = new ProductCategoriesAdapter(this, productCategories, this);
         filteredProductsAdapter = new FilteredProductsAdapter(this, filteredProductList, this);
         categorizedProductsAdapter = new CategorizedProductsAdapter(this, categorizedProductList, this);
+        layout = findViewById(R.id.frameLayout_noSearchView);
 
         // Populate List Data
         setUpProductList();
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         HomeFragment homeFragment = new HomeFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_home_fragment, homeFragment)
+                .replace(R.id.frameLayout_withSearchView, homeFragment)
                 .commit();
 
         searchViewSearchProducts = findViewById(R.id.search_view_searchProducts);
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
                     HomeFragment homeFragment = new HomeFragment();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frame_home_fragment, homeFragment)
+                            .replace(R.id.frameLayout_withSearchView, homeFragment)
                             .setReorderingAllowed(true)
                             .addToBackStack(null)
                             .commit();
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 else{
                     SearchFragment searchFragment = new SearchFragment();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frame_home_fragment, searchFragment)
+                            .replace(R.id.frameLayout_withSearchView, searchFragment)
                             .setReorderingAllowed(true)
                             .addToBackStack(null)
                             .commit();
@@ -99,27 +101,35 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
             }
         });
 
-        imageButtonMenu = findViewById(R.id.image_button_logo);
-        imageButtonMenu.setOnClickListener(new View.OnClickListener(){
+        imageButtonHome = findViewById(R.id.image_button_logo);
+        imageButtonHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 HomeFragment homeFragment = new HomeFragment();
                 fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.frame_home_fragment, homeFragment)
+                        .replace(R.id.frameLayout_withSearchView, homeFragment)
                         .commit();
                 closeKeyboard();
+                layout.setVisibility(View.GONE);
                 searchViewSearchProducts.setQuery("", false);
                 searchViewSearchProducts.clearFocus();
             }
-
         });
 
         imageButtonCart = findViewById(R.id.image_button_cart);
         imageButtonCart.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                GroceryListFragment groceryListFragment = new GroceryListFragment();
+                fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout_noSearchView, groceryListFragment)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+                closeKeyboard();
+                layout.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -211,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         CategorizedProductsFragment categorizedProductsFragment = new CategorizedProductsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_home_fragment, categorizedProductsFragment)
+                .replace(R.id.frameLayout_withSearchView, categorizedProductsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -225,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_home_fragment, productDetailsFragment)
+                .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -235,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_home_fragment, productDetailsFragment)
+                .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .commit();
     }
 
@@ -247,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_home_fragment, productDetailsFragment)
+                .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -262,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.frame_home_fragment, productDetailsFragment)
+                .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();

@@ -50,15 +50,28 @@ public class CategorizedProductsFragment extends Fragment{
 
     private void setUpCategorizedList(){
         for(ProductInformationClass i: ((MainActivity)getActivity()).productList){
-            if(i.getProductCategory().equals(((MainActivity)getActivity()).productCategory)){
+            if(((MainActivity)getActivity()).checkPopular == 1){
+                if(i.getProductPopular() == (((MainActivity)getActivity()).checkPopular)){
+                    ((MainActivity)getActivity()).categorizedProductList.add(i);
+                }
+            }
+            else if(i.getProductCategory().equals(((MainActivity)getActivity()).productCategory)){
                 ((MainActivity)getActivity()).categorizedProductList.add(i);
             }
         }
 
-        categoryTitle.setText((((MainActivity)getActivity()).productCategory));
-        categoryDescription.setText(descriptionContents[((MainActivity)getActivity()).categoryNumber]);
-        categoryPath.setText((((MainActivity)getActivity()).productCategory));
-        categoryPath.setPaintFlags(categoryPath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        if(((MainActivity)getActivity()).checkPopular == 1){
+            categoryTitle.setText(getResources().getString(R.string.title_popular_products));
+            categoryDescription.setText(getResources().getString(R.string.description_popular_products));
+            categoryPath.setText(getResources().getString(R.string.title_popular_products));
+            categoryPath.setPaintFlags(categoryPath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
+        else{
+            categoryTitle.setText((((MainActivity)getActivity()).productCategory));
+            categoryDescription.setText(descriptionContents[((MainActivity)getActivity()).categoryNumber]);
+            categoryPath.setText((((MainActivity)getActivity()).productCategory));
+            categoryPath.setPaintFlags(categoryPath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
 
         if(((MainActivity)getActivity()).categorizedProductList.isEmpty()){
             noProductsText.setText("\n\n¯\\_(ツ)_/¯\n\nNo products found under '" + ((MainActivity)getActivity()).productCategory + "'");
