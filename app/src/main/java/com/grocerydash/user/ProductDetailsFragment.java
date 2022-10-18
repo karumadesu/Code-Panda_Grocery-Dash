@@ -102,7 +102,7 @@ public class ProductDetailsFragment extends Fragment{
                 productCategoryPath.setPaintFlags(productCategoryPath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 productNamePath.setText(i.getProductName());
                 productNamePath.setPaintFlags(productNamePath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                Picasso.get().load(String.valueOf(i.getProductImageUrl())).fit().into(productImage);
+                Picasso.get().load(String.valueOf(i.getProductImageUrl())).resize(360, 360).centerCrop().into(productImage);
 
                 if(i.getProductInStock() == 0){
                     ((MainActivity)getActivity()).productQuantity = 0;

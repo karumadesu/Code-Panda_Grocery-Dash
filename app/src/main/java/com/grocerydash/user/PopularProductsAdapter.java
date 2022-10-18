@@ -40,7 +40,7 @@ public class PopularProductsAdapter extends RecyclerView.Adapter<PopularProducts
         productInformationClass = productInformationClassList.get(position);
         holder.productName.setText(productInformationClass.getProductName());
         holder.productPrice.setText("₱" + productInformationClass.getProductPrice());
-        Picasso.get().load(String.valueOf(productInformationClass.getProductImageUrl())).fit().into(holder.productImage);
+        Picasso.get().load(String.valueOf(productInformationClass.getProductImageUrl())).resize(360, 360).centerCrop().into(holder.productImage);
     }
 
     @Override

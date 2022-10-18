@@ -44,7 +44,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         holder.productName.setText(groceryListClass.getProductName());
         holder.productPrice.setText("₱" + String.format("%.2f", (Double.parseDouble(groceryListClass.getProductPrice()) * Double.valueOf(groceryListClass.getProductQuantity()))));
         holder.productQuantity.setText(String.valueOf(groceryListClass.getProductQuantity()));
-        Picasso.get().load(String.valueOf(groceryListClass.getProductImageUrl())).fit().into(holder.productImage);
+        Picasso.get().load(String.valueOf(groceryListClass.getProductImageUrl())).resize(360, 360).centerCrop().into(holder.productImage);
     }
 
     @Override

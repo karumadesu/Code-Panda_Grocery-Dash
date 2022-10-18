@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface{
     int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns;
-    String[] mapLayout;
+    String[] mapLayout, searchHints;
     String searchString, productCategory, productName;
     ArrayList<GroceryListClass> groceryList;
     ArrayList<CategoryClass> productCategories;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         currentlyAtCart = 0;
         numberOfColumns = 57;
         mapLayout = new String[4503];
+        searchHints = getResources().getStringArray(R.array.searchHints);
         db = FirebaseFirestore.getInstance();
         productList = new ArrayList<>();
         productCategories = new ArrayList<>();
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
         // Implement Search Field Listeners
         searchViewSearchProducts = findViewById(R.id.search_view_searchProducts);
+        searchViewSearchProducts.setQueryHint(searchHints[(int) Math.random() * 10]);
         searchViewSearchProducts.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query){

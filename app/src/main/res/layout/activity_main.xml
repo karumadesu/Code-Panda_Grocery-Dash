@@ -92,6 +92,7 @@
                 android:layout_marginLeft="@dimen/_30sdp"
                 android:layout_marginRight="@dimen/_30sdp"
                 android:queryHint="Search"
+                android:searchIcon="@drawable/baseline_search_24"
                 android:textColor="@color/light_gray"
                 android:iconifiedByDefault="false" />
 
