@@ -56,6 +56,8 @@ public class ProductDetailsFragment extends Fragment{
         textViewProductQuantity = view.findViewById(R.id.textView_productQuantity);
         buttonAddToList = view.findViewById(R.id.button_addToList);
 
+        ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.VISIBLE);
+
         imageButtonAddQuantity.setOnClickListener(v -> {
             ((MainActivity)getActivity()).productQuantity++;
             imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.orange));
@@ -71,7 +73,7 @@ public class ProductDetailsFragment extends Fragment{
         });
 
         buttonAddToList.setOnClickListener(v -> {
-            if(((MainActivity)getActivity()).productQuantity == 1){
+            if(((MainActivity)getActivity()).productQuantity > 0){
                 ((MainActivity)getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl, productPrice, ((MainActivity)getActivity()).productQuantity));
             }
             exitFragment();
@@ -123,7 +125,7 @@ public class ProductDetailsFragment extends Fragment{
         HomeFragment homeFragment = new HomeFragment();
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .remove(this)
+                .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
                 .replace(R.id.frameLayout_withSearchView, homeFragment)
                 .commit();
     }

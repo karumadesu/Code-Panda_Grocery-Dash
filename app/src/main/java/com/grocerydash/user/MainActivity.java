@@ -1,6 +1,7 @@
 package com.grocerydash.user;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
@@ -20,18 +21,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CategoryInterface, ProductInterface, CategorizedProductInterface, FilteredProductInterface{
+public class MainActivity extends AppCompatActivity implements CategoryInterface, ProductInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface{
     String searchString, productCategory, productName;
-    int categoryNumber, productQuantity, checkPopular;
+    int categoryNumber, productQuantity, checkPopular, currentlyAtCart;
     ArrayList<GroceryListClass> groceryList;
     ArrayList<ProductCategoryClass> productCategories;
     ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList;
-    ImageButton imageButtonHome, imageButtonCart;
+    ImageButton imageButtonHome, imageButtonCart, imageButtonBack;
     SearchView searchViewSearchProducts;
     PopularProductsAdapter popularProductsAdapter;
     ProductCategoriesAdapter productCategoriesAdapter;
     FilteredProductsAdapter filteredProductsAdapter;
     CategorizedProductsAdapter categorizedProductsAdapter;
+    GroceryListAdapter groceryListAdapter;
     FragmentManager fragmentManager;
     FrameLayout layout;
     FirebaseFirestore db;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         setContentView(R.layout.activity_main);
 
         // Create Instances
+        currentlyAtCart = 0;
         db = FirebaseFirestore.getInstance();
         productList = new ArrayList<>();
         productCategories = new ArrayList<>();
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         productCategoriesAdapter = new ProductCategoriesAdapter(this, productCategories, this);
         filteredProductsAdapter = new FilteredProductsAdapter(this, filteredProductList, this);
         categorizedProductsAdapter = new CategorizedProductsAdapter(this, categorizedProductList, this);
+        groceryListAdapter = new GroceryListAdapter(this, groceryList, this);
         layout = findViewById(R.id.frameLayout_noSearchView);
 
         // Populate List Data
@@ -60,13 +64,14 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         setUpPopularProductList();
         setUpProductCategoryList();
 
-        // Start Fragments
+        // Start Home Fragment
         HomeFragment homeFragment = new HomeFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.frameLayout_withSearchView, homeFragment)
                 .commit();
 
+        // Implement Search Field Listeners
         searchViewSearchProducts = findViewById(R.id.search_view_searchProducts);
         searchViewSearchProducts.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
@@ -101,39 +106,76 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
             }
         });
 
+        // Implement Home Button Listeners
         imageButtonHome = findViewById(R.id.image_button_logo);
         imageButtonHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                HomeFragment homeFragment = new HomeFragment();
-                fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frameLayout_withSearchView, homeFragment)
-                        .commit();
-                closeKeyboard();
-                layout.setVisibility(View.GONE);
-                searchViewSearchProducts.setQuery("", false);
-                searchViewSearchProducts.clearFocus();
+                if(currentlyAtCart == 1){
+                    currentlyAtCart = 0;
+
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                            .replace(R.id.frameLayout_noSearchView, new Fragment())
+                            .commit();
+
+                    HomeFragment homeFragment = new HomeFragment();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                            .replace(R.id.frameLayout_withSearchView, homeFragment)
+                            .commit();
+                }
+                else if(currentlyAtCart == 2){
+                    currentlyAtCart = 0;
+
+                    HomeFragment homeFragment = new HomeFragment();
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                            .replace(R.id.frameLayout_withSearchView, homeFragment)
+                            .commit();
+                    closeKeyboard();
+                    layout.setVisibility(View.GONE);
+                    searchViewSearchProducts.setQuery("", false);
+                    searchViewSearchProducts.clearFocus();
+                }
             }
         });
 
+        // Implement Cart Button Listeners
         imageButtonCart = findViewById(R.id.image_button_cart);
         imageButtonCart.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                GroceryListFragment groceryListFragment = new GroceryListFragment();
+                if(currentlyAtCart != 1) {
+                    currentlyAtCart = 1;
+
+                    GroceryListFragment groceryListFragment = new GroceryListFragment();
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
+                            .replace(R.id.frameLayout_noSearchView, groceryListFragment)
+                            .commit();
+                    closeKeyboard();
+                    layout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        // Implement Back Button Listeners
+        imageButtonBack = findViewById(R.id.imageButton_back);
+        imageButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frameLayout_noSearchView, groceryListFragment)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
+                fragmentManager.popBackStack();
                 closeKeyboard();
-                layout.setVisibility(View.VISIBLE);
             }
         });
     }
 
+    // Function to Retrieve All Products from Database
     private void setUpProductList(){
         CollectionReference productCollection = db.collection("BranchName_Products");
         productCollection.get()
@@ -141,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                     if(!queryDocumentSnapshots.isEmpty()){
                         List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                         for(DocumentSnapshot d : list){
-                            ProductInformationClass info = d.toObject(ProductInformationClass.class);
+                            ProductInformationClass info = d.   toObject(ProductInformationClass.class);
                             productList.add(info);
                         }
                     }
@@ -152,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .addOnFailureListener(e -> Toast.makeText(this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
     }
 
+    // Function to Retrieve All Popular Products from Database
     private void setUpPopularProductList(){
         CollectionReference productCollection = db.collection("BranchName_Products");
         productCollection.whereEqualTo("productInStock", 1).whereEqualTo("productPopular", 1).get()
@@ -171,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .addOnFailureListener(e -> Toast.makeText(this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
     }
 
+    // Function to Store All Category Information in an ArrayList
     private void setUpProductCategoryList(){
         String[] productCategoryNames = getResources().getStringArray(R.array.category_names);
         int[] productCategoryImages = {
@@ -203,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         productCategoriesAdapter.notifyDataSetChanged();
     }
 
+    // Function to Close Device Keyboard
     private void closeKeyboard()
     {
         View view = this.getCurrentFocus();
@@ -215,12 +260,15 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
     @Override
     public void onCategoryClick(int position) {
+        currentlyAtCart = 2;
+
         productCategory = productCategories.get(position).getCategoryName();
         categoryNumber = position;
 
         CategorizedProductsFragment categorizedProductsFragment = new CategorizedProductsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.frameLayout_withSearchView, categorizedProductsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
@@ -229,18 +277,22 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
     @Override
     public void onProductClick(int position) {
+        currentlyAtCart = 2;
+
         productName = popularProductList.get(position).getProductName();
         productQuantity = 1;
 
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
                 .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
     }
 
+    // Function to Refresh Product Details Fragment
     public void updateQuantity(){
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
@@ -251,12 +303,15 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
     @Override
     public void onCategorizedProductClick(int position) {
+        currentlyAtCart = 2;
+
         productName = categorizedProductList.get(position).getProductName();
         productQuantity = 1;
 
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
                 .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
@@ -265,6 +320,8 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
     @Override
     public void onFilteredProductClick(int position) {
+        currentlyAtCart = 2;
+
         productName = filteredProductList.get(position).getProductName();
         productQuantity = 1;
 
@@ -272,9 +329,42 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
                 .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onQuantityAdd(int position) {
+        groceryList.get(position).productQuantity++;
+
+        GroceryListFragment groceryListFragment = new GroceryListFragment();
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frameLayout_noSearchView, groceryListFragment)
+                .commit();
+        closeKeyboard();
+        layout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onQuantitySubtract(int position) {
+        if(groceryList.get(position).productQuantity > 0){
+            groceryList.get(position).productQuantity--;
+
+            if(groceryList.get(position).productQuantity == 0){
+                groceryList.remove(groceryList.get(position));
+            }
+        }
+
+        GroceryListFragment groceryListFragment = new GroceryListFragment();
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frameLayout_noSearchView, groceryListFragment)
+                .commit();
+        closeKeyboard();
+        layout.setVisibility(View.VISIBLE);
     }
 }

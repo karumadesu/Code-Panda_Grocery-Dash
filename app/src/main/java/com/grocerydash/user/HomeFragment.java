@@ -39,6 +39,8 @@ public class HomeFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         ((MainActivity)getActivity()).checkPopular = 0;
+        ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.INVISIBLE);
+
         layout1 = new GridLayoutManager(getActivity(), 2);
         layout2 = new GridLayoutManager(getActivity(), 3);
 
@@ -54,18 +56,17 @@ public class HomeFragment extends Fragment{
         recyclerViewProductCategories.setAdapter(((MainActivity)getActivity()).productCategoriesAdapter);
 
         textSeeAllPopularProducts = view.findViewById(R.id.text_see_all_popular);
-        textSeeAllPopularProducts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).checkPopular = 1;
+        textSeeAllPopularProducts.setOnClickListener(v -> {
+            ((MainActivity)getActivity()).currentlyAtCart = 2;
+            ((MainActivity)getActivity()).checkPopular = 1;
 
-                CategorizedProductsFragment categorizedProductsFragment = new CategorizedProductsFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout_withSearchView, categorizedProductsFragment)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-            }
+            CategorizedProductsFragment categorizedProductsFragment = new CategorizedProductsFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                    .replace(R.id.frameLayout_withSearchView, categorizedProductsFragment)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 }

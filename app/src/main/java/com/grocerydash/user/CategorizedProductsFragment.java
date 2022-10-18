@@ -45,6 +45,8 @@ public class CategorizedProductsFragment extends Fragment{
         categoryPath = view.findViewById(R.id.text_category_path);
         descriptionContents = getResources().getStringArray(R.array.category_descriptions);
 
+        ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.VISIBLE);
+
         setUpCategorizedList();
     }
 
@@ -74,7 +76,9 @@ public class CategorizedProductsFragment extends Fragment{
         }
 
         if(((MainActivity)getActivity()).categorizedProductList.isEmpty()){
-            noProductsText.setText("\n\n¯\\_(ツ)_/¯\n\nNo products found under '" + ((MainActivity)getActivity()).productCategory + "'");
+            String[] kaomojis = getResources().getStringArray(R.array.kaomojis);
+
+            noProductsText.setText(kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found under '" + ((MainActivity)getActivity()).productCategory + "'");
             noProductsText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }

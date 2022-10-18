@@ -12,40 +12,72 @@
         android:layout_height="match_parent" >
 
         <ImageView
-            android:id="@+id/imageview_search_product_image"
+            android:id="@+id/imageView_groceryListProductImage"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
             android:background="@color/white"
             android:layout_margin="@dimen/_5sdp"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/_5sdp"
-            android:orientation="vertical"
-            android:gravity="center" >
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/text_search_product_name"
+                android:id="@+id/textView_groceryListProductName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/arimo"
-                android:textStyle="bold"
                 android:text="@string/dummy_name"
                 android:textColor="@color/dark_gray"
-                android:textSize="@dimen/_16ssp" />
+                android:textSize="@dimen/_14ssp" />
 
             <TextView
-                android:id="@+id/text_search_product_price"
+                android:id="@+id/textView_groceryListProductPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textView_groceryListProductName"
                 android:fontFamily="@font/arimo"
                 android:textStyle="bold"
                 android:text="@string/dummy_price"
                 android:textColor="@color/orange"
-                android:textSize="@dimen/_14ssp" />
+                android:textSize="@dimen/_18ssp" />
 
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/imageButton_groceryListSubtractQuantity"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_toStartOf="@id/textView_groceryListProductQuantity"
+                android:layout_alignBottom="@id/textView_groceryListProductPrice"
+                android:src="@drawable/baseline_indeterminate_check_box_black_36"
+                app:tint="@color/light_gray"
+                android:backgroundTint="@color/transparent"/>
+
+            <TextView
+                android:id="@+id/textView_groceryListProductQuantity"
+                android:layout_width="@dimen/_36ssp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_toStartOf="@id/imageButton_groceryListAddQuantity"
+                android:layout_alignBottom="@id/textView_groceryListProductPrice"
+                android:fontFamily="@font/arimo"
+                android:text="99"
+                android:gravity="center"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/_18ssp" />
+
+            <ImageButton
+                android:id="@+id/imageButton_groceryListAddQuantity"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_alignEnd="@id/textView_groceryListProductName"
+                android:layout_alignBottom="@id/textView_groceryListProductPrice"
+                android:src="@drawable/baseline_add_box_black_36"
+                app:tint="@color/light_gray"
+                android:backgroundTint="@color/transparent"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

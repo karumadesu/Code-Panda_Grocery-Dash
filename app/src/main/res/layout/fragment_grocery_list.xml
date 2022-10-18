@@ -38,9 +38,22 @@
             app:layout_constraintTop_toBottomOf="@id/textView_shoppingListTitle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/relativeLayout_viewListControls">
+            app:layout_constraintBottom_toTopOf="@id/relativeLayout_viewListControls" />
 
-        </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/textView_groceryListEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_320sdp"
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:textSize="@dimen/_24ssp"
+            android:visibility="invisible"
+            android:layout_margin="@dimen/_24ssp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/textView_shoppingListTitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/relativeLayout_viewListControls" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout_viewListControls"
@@ -81,6 +94,7 @@
                         android:gravity="center"/>
 
                     <TextView
+                        android:id="@+id/textView_groceryListTotalPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dummy_price"

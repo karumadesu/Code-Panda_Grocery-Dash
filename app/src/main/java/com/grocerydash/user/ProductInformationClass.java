@@ -1,54 +1,68 @@
 package com.grocerydash.user;
 
+import java.util.ArrayList;
+
 public class ProductInformationClass {
-    int productId, productInStock, productLocationX, productLocationY, productPopular;
-    String productCategory, productImageUrl, productName, productPrice, productShelfNumber;
+    int productId, productInStock, productPopular;
+    String productCategory, productImageUrl, productName, productPrice;
+    ArrayList<String> productLocationX, productLocationY, productShelfNumber;
 
-    public ProductInformationClass(){
-    }
-
-    public ProductInformationClass(String productCategory, int productId, String productImageUrl, int productInStock,
-                                   String productName, String productPrice,
-                                   String productShelfNumber, int productAisleNumber){
-        this.productName = productName;
-        this.productPrice = productPrice;
-        this.productImageUrl = productImageUrl;
-        this.productCategory = productCategory;
+    public ProductInformationClass(int productId, int productInStock, int productPopular, String productCategory,
+                                   String productImageUrl, String productName, String productPrice,
+                                   ArrayList<String> productLocationX, ArrayList<String> productLocationY,
+                                   ArrayList<String> productShelfNumber) {
         this.productId = productId;
         this.productInStock = productInStock;
+        this.productPopular = productPopular;
+        this.productCategory = productCategory;
+        this.productImageUrl = productImageUrl;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productLocationX = productLocationX;
+        this.productLocationY = productLocationY;
         this.productShelfNumber = productShelfNumber;
-        this.productPopular = productAisleNumber;
     }
 
-    public String getProductCategory(){
-        return productCategory;
+    public ProductInformationClass() {
     }
 
-    public String getProductImageUrl(){
-        return productImageUrl;
-    }
-
-    public String getProductName(){
-        return productName;
-    }
-
-    public String getProductPrice(){
-        return productPrice;
-    }
-
-    public String getProductShelfNumber(){
-        return productShelfNumber;
-    }
-
-    public int getProductId(){
+    public int getProductId() {
         return productId;
     }
 
-    public int getProductInStock(){
+    public int getProductInStock() {
         return productInStock;
     }
 
-    public int getProductPopular(){
+    public int getProductPopular() {
         return productPopular;
+    }
+
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public String getProductImageUrl() {
+        return productImageUrl;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getProductPrice() {
+        return productPrice;
+    }
+
+    public ArrayList<String> getProductLocationX() {
+        return productLocationX;
+    }
+
+    public ArrayList<String> getProductLocationY() {
+        return productLocationY;
+    }
+
+    public ArrayList<String> getProductShelfNumber() {
+        return productShelfNumber;
     }
 }

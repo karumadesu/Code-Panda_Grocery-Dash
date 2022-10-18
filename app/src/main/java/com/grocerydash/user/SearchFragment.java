@@ -31,6 +31,7 @@ public class SearchFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         ((MainActivity)getActivity()).filteredProductList.clear();
+        ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.INVISIBLE);
 
         layout = new LinearLayoutManager(getActivity());
         layout.setOrientation(RecyclerView.VERTICAL);
@@ -59,7 +60,7 @@ public class SearchFragment extends Fragment{
         if(((MainActivity)getActivity()).filteredProductList.isEmpty()){
             String[] kaomojis = getResources().getStringArray(R.array.kaomojis);
 
-            textViewNoProducts.setText("\n\n" + kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found with '" + ((MainActivity)getActivity()).searchString + "'");
+            textViewNoProducts.setText(kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found with '" + ((MainActivity)getActivity()).searchString + "'");
             textViewNoProducts.setVisibility(View.VISIBLE);
             recyclerViewSearchProducts.setVisibility(View.GONE);
         }

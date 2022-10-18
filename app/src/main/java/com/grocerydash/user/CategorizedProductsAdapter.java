@@ -73,15 +73,12 @@ public class CategorizedProductsAdapter extends RecyclerView.Adapter<Categorized
             popularProductText = itemView.findViewById(R.id.text_popular_product);
             popularProductIcon = itemView.findViewById(R.id.imageview_popular_product_icon);
 
-            itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    if(categorizedProductInterface != null){
-                        int position = getAdapterPosition();
+            itemView.setOnClickListener(v -> {
+                if(categorizedProductInterface != null){
+                    int position = getAdapterPosition();
 
-                        if(position != RecyclerView.NO_POSITION){
-                            categorizedProductInterface.onCategorizedProductClick(position);
-                        }
+                    if(position != RecyclerView.NO_POSITION){
+                        categorizedProductInterface.onCategorizedProductClick(position);
                     }
                 }
             });

@@ -72,8 +72,7 @@
             <ImageView
                 android:id="@+id/imageView_productDetailsImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@mipmap/ic_grocery_dash" />
+                android:layout_height="match_parent" />
 
         </androidx.cardview.widget.CardView>
 
