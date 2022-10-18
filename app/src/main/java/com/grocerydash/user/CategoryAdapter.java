@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ProductCategoriesAdapter extends RecyclerView.Adapter<ProductCategoriesAdapter.ViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder>{
     CategoryInterface categoryInterface;
     Context context;
-    ArrayList<ProductCategoryClass> productCategoryList;
-    ProductCategoryClass productCategoryClass;
+    ArrayList<CategoryClass> productCategoryList;
+    CategoryClass categoryClass;
 
-    public ProductCategoriesAdapter(Context context, ArrayList<ProductCategoryClass> productCategories, CategoryInterface categoryInterface){
+    public CategoryAdapter(Context context, ArrayList<CategoryClass> productCategories, CategoryInterface categoryInterface){
         this.context = context;
         this.productCategoryList = productCategories;
         this.categoryInterface = categoryInterface;
@@ -30,14 +30,14 @@ public class ProductCategoriesAdapter extends RecyclerView.Adapter<ProductCatego
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.model_product_categories, parent, false);
 
-        return new ProductCategoriesAdapter.ViewHolder(view, categoryInterface);
+        return new CategoryAdapter.ViewHolder(view, categoryInterface);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
-        productCategoryClass = productCategoryList.get(position);
-        holder.categoryName.setText(productCategoryClass.getCategoryName());
-        holder.categoryImage.setImageResource(productCategoryClass.getCategoryImage());
+        categoryClass = productCategoryList.get(position);
+        holder.categoryName.setText(categoryClass.getCategoryName());
+        holder.categoryImage.setImageResource(categoryClass.getCategoryImage());
     }
 
     @Override

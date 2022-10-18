@@ -89,6 +89,13 @@ public class ProductDetailsFragment extends Fragment{
                 productPrice = i.getProductPrice();
                 productImageUrl = i.getProductImageUrl();
 
+                for(GroceryListClass j : ((MainActivity)getActivity()).groceryList){
+                    if(j.getProductName().equals(productName)){
+                        ((MainActivity)getActivity()).productQuantity = j.getProductQuantity();
+                        ((MainActivity)getActivity()).groceryList.remove(j);
+                    }
+                }
+
                 textViewProductName.setText(i.getProductName());
                 textViewProductPrice.setText("₱" + i.getProductPrice());
                 productCategoryPath.setText(i.getProductCategory());

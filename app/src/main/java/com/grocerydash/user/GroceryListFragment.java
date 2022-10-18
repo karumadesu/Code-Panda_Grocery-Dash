@@ -1,5 +1,7 @@
 package com.grocerydash.user;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,13 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class GroceryListFragment extends Fragment {
     TextView totalPrice, listEmpty;
-    Button backButton;
+    Button backButton, goButton;
     RecyclerView recyclerViewGroceryList;
     LinearLayoutManager layout;
+    ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -35,23 +39,40 @@ public class GroceryListFragment extends Fragment {
 
         totalPrice = view.findViewById(R.id.textView_groceryListTotalPrice);
         listEmpty = view.findViewById(R.id.textView_groceryListEmpty);
+        progressBar = view.findViewById(R.id.progressBar_groceryList);
 
         recyclerViewGroceryList = view.findViewById(R.id.recyclerView_shoppingList);
         recyclerViewGroceryList.setLayoutManager(layout);
         recyclerViewGroceryList.setAdapter(((MainActivity)getActivity()).groceryListAdapter);
 
         backButton = view.findViewById(R.id.button_back);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).currentlyAtCart = 0;
+        backButton.setOnClickListener(v -> {
+            ((MainActivity)getActivity()).currentlyAtCart = 0;
 
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
-                        .replace(R.id.frameLayout_noSearchView, new Fragment())
-                        .commit();
-            }
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                    .replace(R.id.frameLayout_noSearchView, new Fragment())
+                    .commit();
         });
+
+        goButton = view.findViewById(R.id.button_readyToGo);
+        goButton.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            StoreLayoutFragment storeLayoutFragment = new StoreLayoutFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                    .replace(R.id.frameLayout_noSearchView, storeLayoutFragment)
+                    .commit();
+        });
+
+        if(((MainActivity)getActivity()).groceryList.isEmpty()){
+            goButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_gray)));
+            goButton.setClickable(false);
+        }
+        else{
+            goButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
+            goButton.setClickable(true);
+        }
 
         calculateTotalPrice();
         checkListContent();

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import javax.annotation.Nullable;
 
-public class SearchFragment extends Fragment{
+public class FilteredProductsFragment extends Fragment{
     TextView textViewNoProducts;
     ImageView easterEgg;
     RecyclerView recyclerViewSearchProducts;

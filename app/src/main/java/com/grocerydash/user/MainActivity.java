@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,22 +19,27 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CategoryInterface, ProductInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface{
+public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface{
+    int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns;
+    String[] mapLayout;
     String searchString, productCategory, productName;
-    int categoryNumber, productQuantity, checkPopular, currentlyAtCart;
     ArrayList<GroceryListClass> groceryList;
-    ArrayList<ProductCategoryClass> productCategories;
+    ArrayList<CategoryClass> productCategories;
     ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList;
     ImageButton imageButtonHome, imageButtonCart, imageButtonBack;
     SearchView searchViewSearchProducts;
     PopularProductsAdapter popularProductsAdapter;
-    ProductCategoriesAdapter productCategoriesAdapter;
+    CategoryAdapter categoryAdapter;
     FilteredProductsAdapter filteredProductsAdapter;
     CategorizedProductsAdapter categorizedProductsAdapter;
     GroceryListAdapter groceryListAdapter;
+    StoreLayoutAdapter storeLayoutAdapter;
     FragmentManager fragmentManager;
     FrameLayout layout;
     FirebaseFirestore db;
@@ -45,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
         // Create Instances
         currentlyAtCart = 0;
+        numberOfColumns = 57;
+        mapLayout = new String[4503];
         db = FirebaseFirestore.getInstance();
         productList = new ArrayList<>();
         productCategories = new ArrayList<>();
@@ -53,16 +61,18 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         categorizedProductList = new ArrayList<>();
         groceryList = new ArrayList<>();
         popularProductsAdapter = new PopularProductsAdapter(this, popularProductList, this);
-        productCategoriesAdapter = new ProductCategoriesAdapter(this, productCategories, this);
+        categoryAdapter = new CategoryAdapter(this, productCategories, this);
         filteredProductsAdapter = new FilteredProductsAdapter(this, filteredProductList, this);
         categorizedProductsAdapter = new CategorizedProductsAdapter(this, categorizedProductList, this);
         groceryListAdapter = new GroceryListAdapter(this, groceryList, this);
+        storeLayoutAdapter = new StoreLayoutAdapter(this, mapLayout);
         layout = findViewById(R.id.frameLayout_noSearchView);
 
         // Populate List Data
         setUpProductList();
         setUpPopularProductList();
         setUpProductCategoryList();
+        readStoreLayoutFile();
 
         // Start Home Fragment
         HomeFragment homeFragment = new HomeFragment();
@@ -94,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                             .commit();
                 }
                 else{
-                    SearchFragment searchFragment = new SearchFragment();
+                    FilteredProductsFragment filteredProductsFragment = new FilteredProductsFragment();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frameLayout_withSearchView, searchFragment)
+                            .replace(R.id.frameLayout_withSearchView, filteredProductsFragment)
                             .setReorderingAllowed(true)
                             .addToBackStack(null)
                             .commit();
@@ -242,9 +252,9 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         };
 
         for(int i = 0; i < productCategoryNames.length; i++){
-            productCategories.add(new ProductCategoryClass(productCategoryNames[i], productCategoryImages[i]));
+            productCategories.add(new CategoryClass(productCategoryNames[i], productCategoryImages[i]));
         }
-        productCategoriesAdapter.notifyDataSetChanged();
+        categoryAdapter.notifyDataSetChanged();
     }
 
     // Function to Close Device Keyboard
@@ -276,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     }
 
     @Override
-    public void onProductClick(int position) {
+    public void onPopularProductClick(int position) {
         currentlyAtCart = 2;
 
         productName = popularProductList.get(position).getProductName();
@@ -366,5 +376,25 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .commit();
         closeKeyboard();
         layout.setVisibility(View.VISIBLE);
+    }
+
+    public void readStoreLayoutFile(){
+        AssetManager assetManager = getAssets();
+
+        try{
+            String str;
+            InputStream inputStream = assetManager.open("layout.txt");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while((str = bufferedReader.readLine()) != null){
+                stringBuilder.append(str).append(" ");
+            }
+
+            mapLayout = stringBuilder.toString().split(" ");
+        }
+        catch (Exception e){
+            Toast.makeText(this, "" + e, Toast.LENGTH_SHORT).show();
+        }
     }
 }

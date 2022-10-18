@@ -13,6 +13,17 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/_5sdp">
 
+        <ProgressBar
+            android:id="@+id/progressBar_groceryList"
+            android:layout_width="@dimen/_64sdp"
+            android:layout_height="@dimen/_64sdp"
+            android:indeterminateTint="@color/orange"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="invisible" />
+
         <TextView
             android:id="@+id/textView_shoppingListTitle"
             android:layout_width="match_parent"

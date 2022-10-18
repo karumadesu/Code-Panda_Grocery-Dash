@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.support.annotation.NonNull;
@@ -13,12 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -53,7 +46,7 @@ public class HomeFragment extends Fragment{
 
         recyclerViewProductCategories = view.findViewById(R.id.recyclerview_productCategory);
         recyclerViewProductCategories.setLayoutManager(layout2);
-        recyclerViewProductCategories.setAdapter(((MainActivity)getActivity()).productCategoriesAdapter);
+        recyclerViewProductCategories.setAdapter(((MainActivity)getActivity()).categoryAdapter);
 
         textSeeAllPopularProducts = view.findViewById(R.id.text_see_all_popular);
         textSeeAllPopularProducts.setOnClickListener(v -> {

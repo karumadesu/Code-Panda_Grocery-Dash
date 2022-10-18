@@ -1,10 +1,10 @@
 package com.grocerydash.user;
 
-public class ProductCategoryClass {
+public class CategoryClass {
     String categoryName;
     int categoryImage;
 
-    public ProductCategoryClass(String categoryName, int categoryImage){
+    public CategoryClass(String categoryName, int categoryImage){
         this.categoryName = categoryName;
         this.categoryImage = categoryImage;
     }

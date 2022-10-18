@@ -15,15 +15,15 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class PopularProductsAdapter extends RecyclerView.Adapter<PopularProductsAdapter.ViewHolder>{
-    ProductInterface productInterface;
+    PopularProductsInterface popularProductsInterface;
     Context context;
     ArrayList<ProductInformationClass> productInformationClassList;
     ProductInformationClass productInformationClass;
 
-    public PopularProductsAdapter(Context context, ArrayList<ProductInformationClass> productInformationClassList, ProductInterface productInterface){
+    public PopularProductsAdapter(Context context, ArrayList<ProductInformationClass> productInformationClassList, PopularProductsInterface popularProductsInterface){
         this.context = context;
         this.productInformationClassList = productInformationClassList;
-        this.productInterface = productInterface;
+        this.popularProductsInterface = popularProductsInterface;
     }
 
     @NonNull
@@ -32,7 +32,7 @@ public class PopularProductsAdapter extends RecyclerView.Adapter<PopularProducts
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.model_popular_product, parent, false);
 
-        return new PopularProductsAdapter.ViewHolder(view, productInterface);
+        return new PopularProductsAdapter.ViewHolder(view, popularProductsInterface);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PopularProductsAdapter extends RecyclerView.Adapter<PopularProducts
         ImageView productImage;
         TextView productName, productPrice;
 
-        public ViewHolder(@NonNull View itemView, ProductInterface productInterface) {
+        public ViewHolder(@NonNull View itemView, PopularProductsInterface popularProductsInterface) {
             super(itemView);
 
             productImage = itemView.findViewById(R.id.imageview_popular_product_image);
@@ -62,11 +62,11 @@ public class PopularProductsAdapter extends RecyclerView.Adapter<PopularProducts
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    if(productInterface != null){
+                    if(popularProductsInterface != null){
                         int position = getAdapterPosition();
 
                         if(position != RecyclerView.NO_POSITION){
-                            productInterface.onProductClick(position);
+                            popularProductsInterface.onPopularProductClick(position);
                         }
                     }
                 }
