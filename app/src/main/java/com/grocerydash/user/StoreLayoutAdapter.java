@@ -15,12 +15,13 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.ViewHolder>{
-    String[] storeLayout;
     Context context;
+    ArrayList<StoreLayoutClass> storeLayoutClassList;
+    StoreLayoutClass storeLayoutClass;
 
-    public StoreLayoutAdapter(Context context, String[] storeLayout){
+    public StoreLayoutAdapter(Context context, ArrayList<StoreLayoutClass> storeLayoutClassList){
         this.context = context;
-        this.storeLayout = storeLayout;
+        this.storeLayoutClassList = storeLayoutClassList;
     }
 
     @NonNull
@@ -34,12 +35,33 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
+        storeLayoutClass = storeLayoutClassList.get(position);
 
+        switch(storeLayoutClass.getTileImage()){
+            case 1:
+                holder.tileImage.setImageResource(R.drawable.ic_basket);
+                break;
+            case 2:
+                holder.tileImage.setImageResource(R.drawable.ic_floor);
+                break;
+            case 3:
+                holder.tileImage.setImageResource(R.drawable.ic_star);
+                break;
+            case 4:
+                holder.tileImage.setImageResource(R.drawable.ic_user);
+                break;
+            case 9:
+                holder.tileImage.setImageResource(R.drawable.ic_wall);
+                break;
+            default:
+                holder.tileImage.setImageResource(R.drawable.ic_blank);
+                break;
+        }
     }
 
     @Override
     public int getItemCount(){
-        return storeLayout.length;
+        return storeLayoutClassList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

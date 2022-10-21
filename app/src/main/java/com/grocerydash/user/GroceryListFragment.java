@@ -57,6 +57,8 @@ public class GroceryListFragment extends Fragment {
 
         goButton = view.findViewById(R.id.button_readyToGo);
         goButton.setOnClickListener(v -> {
+            ((MainActivity)getActivity()).currentlyAtCart = 3;
+            goButton.setClickable(false);
             progressBar.setVisibility(View.VISIBLE);
             StoreLayoutFragment storeLayoutFragment = new StoreLayoutFragment();
             getActivity().getSupportFragmentManager().beginTransaction()

@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -27,12 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface{
-    int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns;
+    int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns, numberOfRows;
     String[] mapLayout, searchHints;
     String searchString, productCategory, productName;
     ArrayList<GroceryListClass> groceryList;
-    ArrayList<CategoryClass> productCategories;
+    ArrayList<CategoryClass> productCategoryList;
     ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList;
+    ArrayList<StoreLayoutClass> storeLayoutList;
     ImageButton imageButtonHome, imageButtonCart, imageButtonBack;
     SearchView searchViewSearchProducts;
     PopularProductsAdapter popularProductsAdapter;
@@ -53,28 +53,31 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         // Create Instances
         currentlyAtCart = 0;
         numberOfColumns = 57;
-        mapLayout = new String[4503];
-        searchHints = getResources().getStringArray(R.array.searchHints);
+        numberOfRows = 79;
         db = FirebaseFirestore.getInstance();
+        searchHints = getResources().getStringArray(R.array.searchHints);
+        layout = findViewById(R.id.frameLayout_noSearchView);
+
         productList = new ArrayList<>();
-        productCategories = new ArrayList<>();
+        productCategoryList = new ArrayList<>();
         filteredProductList = new ArrayList<>();
         popularProductList = new ArrayList<>();
         categorizedProductList = new ArrayList<>();
         groceryList = new ArrayList<>();
+        storeLayoutList = new ArrayList<>();
+
         popularProductsAdapter = new PopularProductsAdapter(this, popularProductList, this);
-        categoryAdapter = new CategoryAdapter(this, productCategories, this);
+        categoryAdapter = new CategoryAdapter(this, productCategoryList, this);
         filteredProductsAdapter = new FilteredProductsAdapter(this, filteredProductList, this);
         categorizedProductsAdapter = new CategorizedProductsAdapter(this, categorizedProductList, this);
         groceryListAdapter = new GroceryListAdapter(this, groceryList, this);
-        storeLayoutAdapter = new StoreLayoutAdapter(this, mapLayout);
-        layout = findViewById(R.id.frameLayout_noSearchView);
+        storeLayoutAdapter = new StoreLayoutAdapter(this, storeLayoutList);
 
         // Populate List Data
+        readStoreLayoutFile();
         setUpProductList();
         setUpPopularProductList();
         setUpProductCategoryList();
-        readStoreLayoutFile();
 
         // Start Home Fragment
         HomeFragment homeFragment = new HomeFragment();
@@ -124,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         imageButtonHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(currentlyAtCart == 1){
+                if(currentlyAtCart == 1 || currentlyAtCart == 3){
                     currentlyAtCart = 0;
 
                     fragmentManager = getSupportFragmentManager();
@@ -181,9 +184,24 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         imageButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentManager = getSupportFragmentManager();
-                fragmentManager.popBackStack();
-                closeKeyboard();
+                if(currentlyAtCart == 3){
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                            .replace(R.id.frameLayout_noSearchView, new Fragment())
+                            .commit();
+
+                    HomeFragment homeFragment = new HomeFragment();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                            .replace(R.id.frameLayout_withSearchView, homeFragment)
+                            .commit();
+                }
+                else{
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.popBackStack();
+                    closeKeyboard();
+                }
             }
         });
     }
@@ -227,6 +245,43 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .addOnFailureListener(e -> Toast.makeText(this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
     }
 
+    // Function to Store Layout from Text File to ArrayList
+    public void readStoreLayoutFile(){
+        boolean isObstacle;
+        AssetManager assetManager = getAssets();
+
+        try{
+            String str;
+            InputStream inputStream = assetManager.open("layout.txt");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+
+            while((str = bufferedReader.readLine()) != null){
+                stringBuilder.append(str).append(" ");
+            }
+
+            mapLayout = stringBuilder.toString().split(" ");
+        }
+        catch (Exception e){
+            Toast.makeText(this, "" + e, Toast.LENGTH_SHORT).show();
+        }
+
+        for(int i = 0; i < numberOfRows; i++){
+            for(int j = 0; j < numberOfColumns; j++){
+                if(Integer.parseInt(mapLayout[(i * numberOfColumns) + j]) != 2){
+                    isObstacle = false;
+                }
+                else{
+                    isObstacle = true;
+                }
+
+                storeLayoutList.add(new StoreLayoutClass(i, j, Integer.parseInt(mapLayout[(i * numberOfColumns) + j]), 0, isObstacle));
+            }
+        }
+
+        storeLayoutAdapter.notifyDataSetChanged();
+    }
+
     // Function to Store All Category Information in an ArrayList
     private void setUpProductCategoryList(){
         String[] productCategoryNames = getResources().getStringArray(R.array.category_names);
@@ -255,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         };
 
         for(int i = 0; i < productCategoryNames.length; i++){
-            productCategories.add(new CategoryClass(productCategoryNames[i], productCategoryImages[i]));
+            productCategoryList.add(new CategoryClass(productCategoryNames[i], productCategoryImages[i]));
         }
         categoryAdapter.notifyDataSetChanged();
     }
@@ -275,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     public void onCategoryClick(int position) {
         currentlyAtCart = 2;
 
-        productCategory = productCategories.get(position).getCategoryName();
+        productCategory = productCategoryList.get(position).getCategoryName();
         categoryNumber = position;
 
         CategorizedProductsFragment categorizedProductsFragment = new CategorizedProductsFragment();
@@ -379,25 +434,5 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .commit();
         closeKeyboard();
         layout.setVisibility(View.VISIBLE);
-    }
-
-    public void readStoreLayoutFile(){
-        AssetManager assetManager = getAssets();
-
-        try{
-            String str;
-            InputStream inputStream = assetManager.open("layout.txt");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
-
-            while((str = bufferedReader.readLine()) != null){
-                stringBuilder.append(str).append(" ");
-            }
-
-            mapLayout = stringBuilder.toString().split(" ");
-        }
-        catch (Exception e){
-            Toast.makeText(this, "" + e, Toast.LENGTH_SHORT).show();
-        }
     }
 }
