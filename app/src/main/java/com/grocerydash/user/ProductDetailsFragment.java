@@ -28,6 +28,8 @@ public class ProductDetailsFragment extends Fragment{
     ImageButton imageButtonSubtractQuantity, imageButtonAddQuantity;
     Button buttonAddToList;
     String productName, productPrice, productImageUrl;
+    String[] productX, productY;
+    int productXLocation, productYLocation;
 
     @Nullable
     @Override
@@ -74,7 +76,8 @@ public class ProductDetailsFragment extends Fragment{
 
         buttonAddToList.setOnClickListener(v -> {
             if(((MainActivity)getActivity()).productQuantity > 0){
-                ((MainActivity)getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl, productPrice, ((MainActivity)getActivity()).productQuantity));
+                ((MainActivity)getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
+                        productPrice, ((MainActivity)getActivity()).productQuantity, productXLocation, productYLocation));
             }
             exitFragment();
         });
@@ -88,6 +91,10 @@ public class ProductDetailsFragment extends Fragment{
                 productName = i.getProductName();
                 productPrice = i.getProductPrice();
                 productImageUrl = i.getProductImageUrl();
+                productX = i.getProductLocationX().toArray(new String[0]);
+                productY = i.getProductLocationY().toArray(new String[0]);
+                productXLocation = Integer.parseInt(productX[0]);
+                productYLocation = Integer.parseInt(productY[0]);
 
                 for(GroceryListClass j : ((MainActivity)getActivity()).groceryList){
                     if(j.getProductName().equals(productName)){

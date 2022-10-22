@@ -50,6 +50,9 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
             case 4:
                 holder.tileImage.setImageResource(R.drawable.ic_user);
                 break;
+            case 5:
+                holder.tileImage.setImageResource(R.drawable.ic_goal);
+                break;
             case 9:
                 holder.tileImage.setImageResource(R.drawable.ic_wall);
                 break;

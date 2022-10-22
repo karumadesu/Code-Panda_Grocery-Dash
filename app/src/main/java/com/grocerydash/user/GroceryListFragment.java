@@ -53,6 +53,11 @@ public class GroceryListFragment extends Fragment {
                     .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
                     .replace(R.id.frameLayout_noSearchView, new Fragment())
                     .commit();
+
+            HomeFragment homeFragment = new HomeFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayout_withSearchView, homeFragment)
+                    .commit();
         });
 
         goButton = view.findViewById(R.id.button_readyToGo);
@@ -88,6 +93,7 @@ public class GroceryListFragment extends Fragment {
         }
 
         totalPrice.setText("₱" + String.format("%.2f", total));
+        ((MainActivity)getActivity()).totalPrice = total;
     }
 
     public void checkListContent(){

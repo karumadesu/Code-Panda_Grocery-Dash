@@ -10,19 +10,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/_5sdp">
+        android:layout_height="match_parent">
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progressBar_groceryList"
-            android:layout_width="@dimen/_64sdp"
-            android:layout_height="@dimen/_64sdp"
-            android:indeterminateTint="@color/orange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/orange"
+            app:trackColor="@color/light_gray"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/textView_shoppingListTitle"
@@ -37,19 +37,25 @@
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressBar_groceryList"
             app:layout_constraintLeft_toLeftOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_shoppingList"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_320sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/textView_shoppingListTitle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/relativeLayout_viewListControls" />
+            app:layout_constraintBottom_toTopOf="@id/relativeLayout_viewListControls" >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_shoppingList"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_320sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/textView_groceryListEmpty"
@@ -70,7 +76,10 @@
             android:id="@+id/relativeLayout_viewListControls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_totalCost"

@@ -64,7 +64,6 @@
                     android:id="@+id/imageView_currentProductImage"
                     android:layout_width="@dimen/_80sdp"
                     android:layout_height="@dimen/_80sdp"
-                    android:background="@color/light_gray"
                     android:layout_centerVertical="true"/>
 
                 <RelativeLayout
@@ -119,8 +118,10 @@
                     android:textAllCaps="false"
                     android:textStyle="bold"
                     android:textSize="@dimen/_16sdp"
-                    android:textColor="@color/orange"
-                    android:background="@drawable/bg_bordered_rectangle" />
+                    android:textColor="@color/white"
+                    android:clickable="false"
+                    android:background="@drawable/bg_white_rounded_rectangle"
+                    android:backgroundTint="@color/light_gray"/>
 
                 <Button
                     android:id="@+id/button_nextItem"

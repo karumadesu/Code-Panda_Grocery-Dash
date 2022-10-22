@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +28,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface{
     int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns, numberOfRows;
+    double totalPrice;
     String[] mapLayout, searchHints;
     String searchString, productCategory, productName;
     ArrayList<GroceryListClass> groceryList;
@@ -173,6 +175,12 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                             .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
                             .replace(R.id.frameLayout_noSearchView, groceryListFragment)
                             .commit();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> fragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout_withSearchView, new Fragment())
+                            .commit(), 1000);
+
                     closeKeyboard();
                     layout.setVisibility(View.VISIBLE);
                 }

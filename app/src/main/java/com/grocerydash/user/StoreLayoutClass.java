@@ -35,4 +35,8 @@ public class StoreLayoutClass {
     public void setDistance(int distance) {
         this.distance = distance;
     }
+
+    public void setTileImage(int tileImage) {
+        this.tileImage = tileImage;
+    }
 }
