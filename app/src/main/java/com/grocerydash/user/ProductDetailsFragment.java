@@ -111,19 +111,26 @@ public class ProductDetailsFragment extends Fragment{
                 productNamePath.setPaintFlags(productNamePath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 Picasso.get().load(String.valueOf(i.getProductImageUrl())).resize(360, 360).centerCrop().into(productImage);
 
+                if(((MainActivity)getActivity()).productQuantity == 0){
+                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
+                }
+                else{
+                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.icon));
+                }
+
                 if(i.getProductInStock() == 0){
                     ((MainActivity)getActivity()).productQuantity = 0;
 
                     productStock.setText("Out of Stock");
                     productStock.setTextColor(getResources().getColor(R.color.red));
-                    imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.dark_gray));
+                    imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                     imageButtonAddQuantity.setClickable(false);
-                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.dark_gray));
+                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                     imageButtonSubtractQuantity.setClickable(false);
                 }
                 else{
                     productStock.setText("In Stock");
-                    productStock.setTextColor(getResources().getColor(R.color.orange));
+                    productStock.setTextColor(getResources().getColor(R.color.sub_text));
                 }
 
                 textViewProductQuantity.setText(String.valueOf(((MainActivity)getActivity()).productQuantity));
@@ -139,7 +146,7 @@ public class ProductDetailsFragment extends Fragment{
         HomeFragment homeFragment = new HomeFragment();
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
                 .replace(R.id.frameLayout_withSearchView, homeFragment)
                 .commit();
     }

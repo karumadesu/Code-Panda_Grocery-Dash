@@ -38,8 +38,8 @@ public class StoreLayoutFragment extends Fragment {
     ImageView imageViewCurrentProductImage;
     Button previousButton, nextButton;
     RecyclerView recyclerView;
-    NestedScrollView nestedScrollView;
     HorizontalScrollView horizontalScrollView;
+    NestedScrollView nestedScrollView;
 
     @Nullable
     @Override
@@ -53,14 +53,17 @@ public class StoreLayoutFragment extends Fragment {
 
         counter = 0;
         ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.VISIBLE);
-        nestedScrollView = view.findViewById(R.id.nestedScrollView_storeLayout);
+        ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
+
         horizontalScrollView = view.findViewById(R.id.horizontalScrollView_storeLayout);
+        nestedScrollView = view.findViewById(R.id.nestedScrollView_storeLayout);
         textViewCurrentProductName = view.findViewById(R.id.textView_currentProductName);
         textViewNextProductName = view.findViewById(R.id.textView_nextProductName);
         imageViewCurrentProductImage = view.findViewById(R.id.imageView_currentProductImage);
 
         recyclerView = view.findViewById(R.id.recyclerView_storeLayout);
         recyclerView.setAdapter(((MainActivity)getActivity()).storeLayoutAdapter);
+        recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), ((MainActivity)getActivity()).numberOfColumns){
             @Override
             public void onLayoutCompleted(final RecyclerView.State state){
@@ -68,7 +71,7 @@ public class StoreLayoutFragment extends Fragment {
 
                 scrollValue = recyclerView.getChildAt(0).getMeasuredHeight();
                 nestedScrollView.smoothScrollTo(0, scrollValue * 79);
-                horizontalScrollView.smoothScrollTo((scrollValue * 36 + ((scrollValue / 5) * 4)), 0);
+                horizontalScrollView.smoothScrollBy((scrollValue * 36) + ((scrollValue / 5) * 4), 0);
             }
         });
         recyclerView.setHasFixedSize(true);
@@ -95,7 +98,7 @@ public class StoreLayoutFragment extends Fragment {
 
         textViewCurrentProductName.setText(listItem.getProductName());
         nestedScrollView.smoothScrollTo(0, scrollValue * (listItem.getProductX() - 5) + (scrollValue / 2));
-        horizontalScrollView.smoothScrollTo(scrollValue * (listItem.getProductY() - 6) + ((scrollValue / 5) * 4), 0);
+        horizontalScrollView.smoothScrollTo((scrollValue * (listItem.getProductY() - 6) + ((scrollValue / 5) * 4)), 0);
 
         Picasso.get().load(String.valueOf(listItem.getProductImageUrl()))
                 .resize(360, 360)

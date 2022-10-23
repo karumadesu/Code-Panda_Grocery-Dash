@@ -5,24 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/off_white"
+    android:background="@color/background"
     tools:context=".GroceryListFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progressBar_groceryList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:indicatorColor="@color/orange"
-            app:trackColor="@color/light_gray"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/textView_shoppingListTitle"
@@ -34,10 +22,10 @@
             android:paddingBottom="@dimen/_8sdp"
             android:fontFamily="@font/arimo"
             android:text="@string/my_shopping_list"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/header_text"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/progressBar_groceryList"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
         <RelativeLayout
@@ -96,8 +84,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/bg_bordered_rectangle"
-                    android:backgroundTint="@color/light_gray"
+                    android:background="@drawable/bg_white_rounded_rectangle"
+                    android:backgroundTint="@color/card_background"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:layout_margin="@dimen/_6sdp"
@@ -109,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/estimated_total_cost"
                         android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/light_gray"
+                        android:textColor="@color/sub_text"
                         android:fontFamily="@font/arimo"
                         android:gravity="center"/>
 

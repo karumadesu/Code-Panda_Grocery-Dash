@@ -27,7 +27,7 @@ public class ListCompletedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         totalPrice = view.findViewById(R.id.textView_price);
-        totalPrice.setText(String.valueOf(((MainActivity)getActivity()).totalPrice));
+        totalPrice.setText("₱" + String.format("%.2f", ((MainActivity)getActivity()).totalPrice));
 
         returnToHome = view.findViewById(R.id.button_returnToHome);
         returnToHome.setOnClickListener(v -> {
@@ -36,7 +36,13 @@ public class ListCompletedFragment extends Fragment {
                     .replace(R.id.frameLayout_noSearchView, new Fragment())
                     .commit();
 
+            HomeFragment homeFragment = new HomeFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayout_withSearchView, homeFragment)
+                    .commit();
+
             ((MainActivity)getActivity()).currentlyAtCart = 0;
+            ((MainActivity)getActivity()).groceryList.clear();
         });
     }
 }

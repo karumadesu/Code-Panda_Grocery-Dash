@@ -17,12 +17,14 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
 public class GroceryListFragment extends Fragment {
     TextView totalPrice, listEmpty;
     Button backButton, goButton;
     RecyclerView recyclerViewGroceryList;
     LinearLayoutManager layout;
-    ProgressBar progressBar;
+
 
     @Nullable
     @Override
@@ -39,7 +41,6 @@ public class GroceryListFragment extends Fragment {
 
         totalPrice = view.findViewById(R.id.textView_groceryListTotalPrice);
         listEmpty = view.findViewById(R.id.textView_groceryListEmpty);
-        progressBar = view.findViewById(R.id.progressBar_groceryList);
 
         recyclerViewGroceryList = view.findViewById(R.id.recyclerView_shoppingList);
         recyclerViewGroceryList.setLayoutManager(layout);
@@ -62,9 +63,10 @@ public class GroceryListFragment extends Fragment {
 
         goButton = view.findViewById(R.id.button_readyToGo);
         goButton.setOnClickListener(v -> {
+            ((MainActivity)getActivity()).progressBar.setVisibility(View.VISIBLE);
             ((MainActivity)getActivity()).currentlyAtCart = 3;
             goButton.setClickable(false);
-            progressBar.setVisibility(View.VISIBLE);
+
             StoreLayoutFragment storeLayoutFragment = new StoreLayoutFragment();
             getActivity().getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)

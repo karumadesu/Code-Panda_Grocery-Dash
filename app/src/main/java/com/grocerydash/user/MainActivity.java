@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     ArrayList<StoreLayoutClass> storeLayoutList;
     ImageButton imageButtonHome, imageButtonCart, imageButtonBack;
     SearchView searchViewSearchProducts;
+    LinearProgressIndicator progressBar;
     PopularProductsAdapter popularProductsAdapter;
     CategoryAdapter categoryAdapter;
     FilteredProductsAdapter filteredProductsAdapter;
@@ -56,9 +58,11 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         currentlyAtCart = 0;
         numberOfColumns = 57;
         numberOfRows = 79;
+
         db = FirebaseFirestore.getInstance();
         searchHints = getResources().getStringArray(R.array.searchHints);
         layout = findViewById(R.id.frameLayout_noSearchView);
+        progressBar = findViewById(R.id.progressBar_groceryList);
 
         productList = new ArrayList<>();
         productCategoryList = new ArrayList<>();
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                     Handler handler = new Handler();
                     handler.postDelayed(() -> fragmentManager.beginTransaction()
                             .replace(R.id.frameLayout_withSearchView, new Fragment())
-                            .commit(), 1000);
+                            .commit(), 500);
 
                     closeKeyboard();
                     layout.setVisibility(View.VISIBLE);
@@ -361,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
@@ -387,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
@@ -405,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
@@ -443,4 +447,5 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         closeKeyboard();
         layout.setVisibility(View.VISIBLE);
     }
+
 }

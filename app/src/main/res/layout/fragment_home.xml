@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/off_white"
+    android:background="@color/background"
     tools:context=".HomeFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -25,7 +25,7 @@
                 android:layout_marginBottom="@dimen/_5ssp"
                 android:fontFamily="@font/arimo"
                 android:text="@string/title_popular_products"
-                android:textColor="@color/dark_gray"
+                android:textColor="@color/header_text"
                 android:textSize="@dimen/_20ssp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/recyclerview_popularProducts"
@@ -67,7 +67,7 @@
                 android:layout_marginBottom="@dimen/_5ssp"
                 android:fontFamily="@font/arimo"
                 android:text="@string/product_categories"
-                android:textColor="@color/dark_gray"
+                android:textColor="@color/header_text"
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/recyclerview_productCategory"
