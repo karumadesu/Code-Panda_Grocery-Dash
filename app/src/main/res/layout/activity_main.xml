@@ -116,6 +116,15 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <FrameLayout
+            android:id="@+id/frameLayout_noToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progressBar_groceryList"
             android:layout_width="match_parent"
