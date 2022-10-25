@@ -1,7 +1,5 @@
 package com.grocerydash.user;
 
-import static java.lang.Math.ceil;
-
 import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -33,13 +31,13 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class StoreLayoutFragment extends Fragment {
-    int scrollValue, counter;
+    int counter, columnCount;
+    boolean onFirstItem;
     TextView textViewCurrentProductName, textViewNextProductName;
     ImageView imageViewCurrentProductImage;
     Button previousButton, nextButton;
     RecyclerView recyclerView;
-    HorizontalScrollView horizontalScrollView;
-    NestedScrollView nestedScrollView;
+    FixedGridLayoutManager fixedGridLayoutManager;
 
     @Nullable
     @Override
@@ -52,29 +50,22 @@ public class StoreLayoutFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         counter = 0;
+        onFirstItem = true;
+        columnCount = ((MainActivity)getActivity()).numberOfColumns;
+
         ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.VISIBLE);
         ((MainActivity)getActivity()).progressBar.setVisibility(View.INVISIBLE);
 
-        horizontalScrollView = view.findViewById(R.id.horizontalScrollView_storeLayout);
-        nestedScrollView = view.findViewById(R.id.nestedScrollView_storeLayout);
         textViewCurrentProductName = view.findViewById(R.id.textView_currentProductName);
         textViewNextProductName = view.findViewById(R.id.textView_nextProductName);
         imageViewCurrentProductImage = view.findViewById(R.id.imageView_currentProductImage);
 
-        recyclerView = view.findViewById(R.id.recyclerView_storeLayout);
-        recyclerView.setAdapter(((MainActivity)getActivity()).storeLayoutAdapter);
-        recyclerView.setNestedScrollingEnabled(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), ((MainActivity)getActivity()).numberOfColumns){
-            @Override
-            public void onLayoutCompleted(final RecyclerView.State state){
-                super.onLayoutCompleted(state);
+        fixedGridLayoutManager = new FixedGridLayoutManager();
+        fixedGridLayoutManager.setTotalColumnCount(((MainActivity)getActivity()).numberOfColumns);
 
-                scrollValue = recyclerView.getChildAt(0).getMeasuredHeight();
-                nestedScrollView.smoothScrollTo(0, scrollValue * 79);
-                horizontalScrollView.smoothScrollBy((scrollValue * 36) + ((scrollValue / 5) * 4), 0);
-            }
-        });
-        recyclerView.setHasFixedSize(true);
+        recyclerView = view.findViewById(R.id.recyclerView_storeLayout);
+        recyclerView.setLayoutManager(fixedGridLayoutManager);
+        recyclerView.setAdapter(((MainActivity)getActivity()).storeLayoutAdapter);
 
         previousButton = view.findViewById(R.id.button_previousItem);
         previousButton.setOnClickListener(v -> {
@@ -97,8 +88,6 @@ public class StoreLayoutFragment extends Fragment {
         GroceryListClass listItem = ((MainActivity)getActivity()).groceryList.get(counter);
 
         textViewCurrentProductName.setText(listItem.getProductName());
-        nestedScrollView.smoothScrollTo(0, scrollValue * (listItem.getProductX() - 5) + (scrollValue / 2));
-        horizontalScrollView.smoothScrollTo((scrollValue * (listItem.getProductY() - 6) + ((scrollValue / 5) * 4)), 0);
 
         Picasso.get().load(String.valueOf(listItem.getProductImageUrl()))
                 .resize(360, 360)
