@@ -39,12 +39,15 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
         storeLayoutClass = storeLayoutClassList.get(position);
 
-        switch(storeLayoutClass.getTileImage()){
+        switch(storeLayoutClass.tileImage){
+            case 0:
+                holder.tileImage.setImageResource(R.drawable.ic_floor);
+                break;
             case 1:
                 holder.tileImage.setImageResource(R.drawable.ic_basket);
                 break;
             case 2:
-                holder.tileImage.setImageResource(R.drawable.ic_floor);
+                holder.tileImage.setImageResource(R.drawable.ic_wall);
                 break;
             case 3:
                 holder.tileImage.setImageResource(R.drawable.ic_star);
@@ -55,13 +58,23 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
             case 5:
                 holder.tileImage.setImageResource(R.drawable.ic_goal);
                 break;
-            case 9:
-                holder.tileImage.setImageResource(R.drawable.ic_wall);
+            case 6:
+                holder.tileImage.setImageResource(R.drawable.ic_currentpath);
+                break;
+            case 7:
+                holder.tileImage.setImageResource(R.drawable.ic_previouspath);
+                break;
+            case 8:
+                holder.tileImage.setImageResource(R.drawable.ic_check);
                 break;
             default:
                 holder.tileImage.setImageResource(R.drawable.ic_blank);
                 break;
         }
+
+//        holder.f.setText(String.valueOf(storeLayoutClass.fCost));
+//        holder.g.setText(String.valueOf(storeLayoutClass.gCost));
+//        holder.h.setText(String.valueOf(storeLayoutClass.hCost));
     }
 
     @Override
@@ -71,11 +84,15 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView tileImage;
+//        TextView f,g,h;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tileImage = itemView.findViewById(R.id.imageView_storeTile);
+//            f = itemView.findViewById(R.id.fcost);
+//            g = itemView.findViewById(R.id.gcost);
+//            h = itemView.findViewById(R.id.hcost);
         }
     }
 }

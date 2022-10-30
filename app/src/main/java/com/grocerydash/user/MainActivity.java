@@ -21,6 +21,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,9 +38,9 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     ArrayList<CategoryClass> productCategoryList;
     ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList;
     ArrayList<StoreLayoutClass> storeLayoutList;
+    ArrayList<ArrayList<StoreLayoutClass>> graphEdges;
     ImageButton imageButtonHome, imageButtonCart, imageButtonBack;
     SearchView searchViewSearchProducts;
-    LinearProgressIndicator progressBar;
     PopularProductsAdapter popularProductsAdapter;
     CategoryAdapter categoryAdapter;
     FilteredProductsAdapter filteredProductsAdapter;
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         db = FirebaseFirestore.getInstance();
         searchHints = getResources().getStringArray(R.array.searchHints);
         layout = findViewById(R.id.frameLayout_noSearchView);
-        progressBar = findViewById(R.id.progressBar_groceryList);
 
         productList = new ArrayList<>();
         productCategoryList = new ArrayList<>();
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         categorizedProductList = new ArrayList<>();
         groceryList = new ArrayList<>();
         storeLayoutList = new ArrayList<>();
+        graphEdges = new ArrayList<>();
 
         popularProductsAdapter = new PopularProductsAdapter(this, popularProductList, this);
         categoryAdapter = new CategoryAdapter(this, productCategoryList, this);
@@ -226,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                     if(!queryDocumentSnapshots.isEmpty()){
                         List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                         for(DocumentSnapshot d : list){
-                            ProductInformationClass info = d.   toObject(ProductInformationClass.class);
+                            ProductInformationClass info = d.toObject(ProductInformationClass.class);
                             productList.add(info);
                         }
                     }
@@ -259,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
     // Function to Store Layout from Text File to ArrayList
     public void readStoreLayoutFile(){
-        boolean isObstacle;
         AssetManager assetManager = getAssets();
 
         try{
@@ -280,14 +281,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
         for(int i = 0; i < numberOfRows; i++){
             for(int j = 0; j < numberOfColumns; j++){
-                if(Integer.parseInt(mapLayout[(i * numberOfColumns) + j]) != 2){
-                    isObstacle = false;
-                }
-                else{
-                    isObstacle = true;
-                }
-
-                storeLayoutList.add(new StoreLayoutClass(i, j, Integer.parseInt(mapLayout[(i * numberOfColumns) + j]), 0, isObstacle));
+                storeLayoutList.add(new StoreLayoutClass(i, j, Integer.parseInt(mapLayout[(i * numberOfColumns) + j])));
             }
         }
 
@@ -447,5 +441,4 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         closeKeyboard();
         layout.setVisibility(View.VISIBLE);
     }
-
 }

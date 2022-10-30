@@ -2,6 +2,7 @@ package com.grocerydash.user;
 
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,8 +18,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
+
+import java.util.Iterator;
 
 public class ProductDetailsFragment extends Fragment{
     RecyclerView recyclerView;
@@ -28,8 +34,8 @@ public class ProductDetailsFragment extends Fragment{
     ImageButton imageButtonSubtractQuantity, imageButtonAddQuantity;
     Button buttonAddToList;
     String productName, productPrice, productImageUrl;
-    String[] productX, productY;
-    int productXLocation, productYLocation;
+    String[] productX, productY, productShelf;
+    int productXLocation, productYLocation, productShelfNumber;
 
     @Nullable
     @Override
@@ -77,9 +83,13 @@ public class ProductDetailsFragment extends Fragment{
         buttonAddToList.setOnClickListener(v -> {
             if(((MainActivity)getActivity()).productQuantity > 0){
                 ((MainActivity)getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
-                        productPrice, ((MainActivity)getActivity()).productQuantity, productXLocation, productYLocation));
+                        productPrice, productShelfNumber, ((MainActivity)getActivity()).productQuantity,
+                        productXLocation, productYLocation, false));
             }
             exitFragment();
+
+            Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity)getActivity()).productQuantity + "x " +
+                    productName + " has been added to your list!", BaseTransientBottomBar.LENGTH_SHORT).show();
         });
 
         setUpProductDetails();
@@ -93,11 +103,16 @@ public class ProductDetailsFragment extends Fragment{
                 productImageUrl = i.getProductImageUrl();
                 productX = i.getProductLocationX().toArray(new String[0]);
                 productY = i.getProductLocationY().toArray(new String[0]);
+                productShelf = i.getProductShelfNumber().toArray(new String[0]);
                 productXLocation = Integer.parseInt(productX[0]);
                 productYLocation = Integer.parseInt(productY[0]);
+                productShelfNumber = Integer.parseInt(productShelf[0]);
 
-                for(GroceryListClass j : ((MainActivity)getActivity()).groceryList){
+                for(Iterator<GroceryListClass> iterator = ((MainActivity)getActivity()).groceryList.iterator(); iterator.hasNext();){
+                    GroceryListClass j = iterator.next();
+
                     if(j.getProductName().equals(productName)){
+                        iterator.remove();
                         ((MainActivity)getActivity()).productQuantity = j.getProductQuantity();
                         ((MainActivity)getActivity()).groceryList.remove(j);
                     }

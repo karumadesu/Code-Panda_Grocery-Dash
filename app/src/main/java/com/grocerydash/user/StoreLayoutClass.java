@@ -1,42 +1,52 @@
 package com.grocerydash.user;
 
-public class StoreLayoutClass {
-    int xCoordinate, yCoordinate, tileImage, distance;
-    boolean isObstacle;
+public class StoreLayoutClass{
+    int tileXCoordinate, tileYCoordinate, tileImage;
+    double gCost, hCost, fCost;
+    boolean isStartingTile, isGoalTile, isSolidTile, isOpenTile, isClosedTile;
+    StoreLayoutClass parentTile;
 
-    public StoreLayoutClass(int xCoordinate, int yCoordinate, int tileImage, int distance, boolean isObstacle) {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
+    public StoreLayoutClass(int tileXCoordinate, int tileYCoordinate, int tileImage){
+        this.tileXCoordinate = tileXCoordinate;
+        this.tileYCoordinate = tileYCoordinate;
         this.tileImage = tileImage;
-        this.distance = distance;
-        this.isObstacle = isObstacle;
     }
 
-    public int getxCoordinate() {
-        return xCoordinate;
+    public void setAsStart(){
+        tileImage = 4;
+        isStartingTile = true;
     }
 
-    public int getyCoordinate() {
-        return yCoordinate;
+    public void setAsGoal(){
+        tileImage = 5;
+        isGoalTile = true;
     }
 
-    public int getTileImage() {
-        return tileImage;
+    public void setAsSolid(){
+        isSolidTile = true;
     }
 
-    public int getDistance() {
-        return distance;
+    public void setAsOpen(){
+        isOpenTile = true;
     }
 
-    public boolean isObstacle() {
-        return isObstacle;
+    public void setAsClosed(){
+        isClosedTile = true;
     }
 
-    public void setDistance(int distance) {
-        this.distance = distance;
+    public void setAsPath(){
+        tileImage = 6;
     }
 
     public void setTileImage(int tileImage) {
         this.tileImage = tileImage;
+    }
+
+    public void setTileXCoordinate(int tileXCoordinate) {
+        this.tileXCoordinate = tileXCoordinate;
+    }
+
+    public void setTileYCoordinate(int tileYCoordinate) {
+        this.tileYCoordinate = tileYCoordinate;
     }
 }

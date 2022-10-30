@@ -33,6 +33,9 @@ public class HomeFragment extends Fragment{
 
         ((MainActivity)getActivity()).checkPopular = 0;
         ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.INVISIBLE);
+        ((MainActivity)getActivity()).searchViewSearchProducts.setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).searchViewSearchProducts.setQuery("", false);
+        ((MainActivity)getActivity()).searchViewSearchProducts.clearFocus();
 
         layout1 = new GridLayoutManager(getActivity(), 2);
         layout2 = new GridLayoutManager(getActivity(), 3);

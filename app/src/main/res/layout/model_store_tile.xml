@@ -9,10 +9,46 @@
         android:id="@+id/imageView_storeTile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/orange"
+        android:background="@color/dark_gray"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/gcost"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="0000"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="@dimen/_8ssp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/hcost"/>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/hcost"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="0000"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="@dimen/_8ssp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/gcost"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/fcost"/>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/fcost"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="0000"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="@dimen/_8ssp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/hcost"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

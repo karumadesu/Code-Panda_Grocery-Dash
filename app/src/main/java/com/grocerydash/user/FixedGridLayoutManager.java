@@ -3,6 +3,7 @@ package com.grocerydash.user;
 import android.content.Context;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -537,6 +538,11 @@ public class FixedGridLayoutManager extends RecyclerView.LayoutManager {
                         - getGlobalColumnOfPosition(mFirstVisiblePosition);
 
                 return new PointF(columnOffset * mDecoratedChildWidth, rowOffset * mDecoratedChildHeight);
+            }
+
+            @Override
+            public float calculateSpeedPerPixel(DisplayMetrics displayMetrics){
+                return 200f / displayMetrics.densityDpi;
             }
         };
         scroller.setTargetPosition(position);

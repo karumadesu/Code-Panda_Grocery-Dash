@@ -33,7 +33,7 @@ public class ListCompletedFragment extends Fragment {
         returnToHome.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
-                    .replace(R.id.frameLayout_noToolbar, new Fragment())
+                    .remove(this)
                     .commit();
 
             HomeFragment homeFragment = new HomeFragment();

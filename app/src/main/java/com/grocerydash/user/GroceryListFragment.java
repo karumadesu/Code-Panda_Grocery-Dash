@@ -63,7 +63,6 @@ public class GroceryListFragment extends Fragment {
 
         goButton = view.findViewById(R.id.button_readyToGo);
         goButton.setOnClickListener(v -> {
-            ((MainActivity)getActivity()).progressBar.setVisibility(View.VISIBLE);
             ((MainActivity)getActivity()).currentlyAtCart = 3;
             goButton.setClickable(false);
 
