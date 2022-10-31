@@ -151,6 +151,9 @@ public class StoreLayoutFragment extends Fragment {
 
         Collections.reverse(edgePath);
         ((MainActivity)getActivity()).graphEdges.add(edgePath);
+
+        goalTile.isGoalTile = false;
+        startTile.isStartingTile = false;
     }
 
     public void search(){
@@ -221,7 +224,14 @@ public class StoreLayoutFragment extends Fragment {
 
             if(i.tileImage == 6){
                 i.tileImage = 7;
-
+                ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((i.tileXCoordinate * columnCount) + i.tileYCoordinate);
+            }
+            else if(i.tileImage == 5 && !i.isGoalTile){
+                i.tileImage = 7;
+                ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((i.tileXCoordinate * columnCount) + i.tileYCoordinate);
+            }
+            else if(i.tileImage == 4 && !i.isStartingTile){
+                i.tileImage = 7;
                 ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((i.tileXCoordinate * columnCount) + i.tileYCoordinate);
             }
         }
@@ -273,7 +283,7 @@ public class StoreLayoutFragment extends Fragment {
                 }
             }
             goalTile.setAsGoal();
-            ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged(nextShelfNumber);
+            ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((goalTile.tileXCoordinate * columnCount) + goalTile.tileYCoordinate);
 
             resetStates();
 
@@ -334,7 +344,7 @@ public class StoreLayoutFragment extends Fragment {
             }
             startTile.setAsStart();
             currentTile = startTile;
-            ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged(currentShelfNumber);
+            ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((startTile.tileXCoordinate * columnCount) + startTile.tileYCoordinate);
 
             goalTile = storeLayout.get(nextShelfNumber);
             if(goalTile.tileImage == 1 || goalTile.tileImage == 3){
@@ -372,7 +382,7 @@ public class StoreLayoutFragment extends Fragment {
                 }
             }
             goalTile.setAsGoal();
-            ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged(nextShelfNumber);
+            ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((goalTile.tileXCoordinate * columnCount) + goalTile.tileYCoordinate);
 
             resetStates();
 
