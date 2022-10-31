@@ -25,6 +25,7 @@ import org.checkerframework.checker.units.qual.A;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class StoreLayoutFragment extends Fragment {
     int counter, edgeCount, columnCount, rowCount, currentShelfNumber, nextShelfNumber, currentTileX, currentTileY, entranceTile, prevStartImage, prevGoalImage;
@@ -102,10 +103,13 @@ public class StoreLayoutFragment extends Fragment {
 //            search();
 //        });
 
+        nearestNeighborAlgorithm();
         twoOptAlgorithm();
+
         ((MainActivity)getActivity()).storeLayoutList.clear();
         ((MainActivity)getActivity()).graphEdges.clear();
         ((MainActivity)getActivity()).readStoreLayoutFile();
+
         updateView();
     }
 
@@ -435,6 +439,52 @@ public class StoreLayoutFragment extends Fragment {
             previousButton.setPadding(0, 0, 0, 0);
             previousButton.setTextColor(getResources().getColor(R.color.white));
             previousButton.setClickable(false);
+        }
+    }
+
+    public void nearestNeighborAlgorithm(){
+        double dx, dy, newDistance;
+        double bestDistance = 9999;
+        int bestIndex = 0;
+
+        for(int i = 0; i < groceryList.size(); i++){
+            dx = Math.abs(storeLayout.get(entranceTile).tileXCoordinate -
+                    storeLayout.get((groceryList.get(i).getProductX() * columnCount) + groceryList.get(i).getProductY()).tileXCoordinate);
+            dy = Math.abs(storeLayout.get(entranceTile).tileYCoordinate -
+                    storeLayout.get((groceryList.get(i).getProductX() * columnCount) + groceryList.get(i).getProductY()).tileYCoordinate);
+            newDistance = dx + dy;
+
+            if(bestDistance > newDistance) {
+                bestDistance = newDistance;
+                bestIndex = i;
+            }
+        }
+        Collections.swap(groceryList, 0, bestIndex);
+        groceryList.get(0).setVisited(true);
+
+        for(int i = 0; i < groceryList.size() - 1; i++){
+            bestDistance = 9999;
+
+            for(int j = 0; j < groceryList.size(); j++){
+                if(!groceryList.get(j).isVisited){
+                    dx = Math.abs(storeLayout.get((groceryList.get(i).getProductX() * columnCount) + groceryList.get(i).getProductY()).tileXCoordinate -
+                            storeLayout.get((groceryList.get(j).getProductX() * columnCount) + groceryList.get(j).getProductY()).tileXCoordinate);
+                    dy = Math.abs(storeLayout.get((groceryList.get(i).getProductX() * columnCount) + groceryList.get(i).getProductY()).tileYCoordinate -
+                            storeLayout.get((groceryList.get(j).getProductX() * columnCount) + groceryList.get(j).getProductY()).tileYCoordinate);
+                    newDistance = dx + dy;
+
+                    if(bestDistance > newDistance){
+                        bestDistance = newDistance;
+                        bestIndex = j;
+                    }
+                }
+            }
+            Collections.swap(groceryList, i + 1, bestIndex);
+            groceryList.get(i + 1).setVisited(true);
+        }
+
+        for(GroceryListClass i : groceryList){
+            i.setVisited(false);
         }
     }
 
@@ -803,6 +853,8 @@ public class StoreLayoutFragment extends Fragment {
                     }
                 }
             }
+            Log.d("", "NEW BEST: " + bestDistance);
         }
+        ((MainActivity)getActivity()).groceryList = groceryList;
     }
 }

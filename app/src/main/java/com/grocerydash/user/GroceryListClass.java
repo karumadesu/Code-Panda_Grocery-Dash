@@ -46,4 +46,8 @@ public class GroceryListClass {
     public boolean isVisited() {
         return isVisited;
     }
+
+    public void setVisited(boolean visited) {
+        isVisited = visited;
+    }
 }

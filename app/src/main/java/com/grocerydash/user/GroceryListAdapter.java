@@ -70,31 +70,25 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
             int orange = itemView.getResources().getColor(R.color.orange);
 
-            addQuantity.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    if(groceryListInterface != null){
-                        int position = getAdapterPosition();
+            addQuantity.setOnClickListener(v -> {
+                if(groceryListInterface != null){
+                    int position = getAdapterPosition();
 
-                        if(position != RecyclerView.NO_POSITION){
-                            addQuantity.setColorFilter(orange);
-                            groceryListInterface.onQuantityAdd(position);
-                        }
+                    if(position != RecyclerView.NO_POSITION){
+                        addQuantity.setColorFilter(orange);
+                        groceryListInterface.onQuantityAdd(position);
                     }
                 }
             });
 
-            subtractQuantity.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    if(groceryListClass.productQuantity > 0){
-                        if(groceryListInterface != null){
-                            int position = getAdapterPosition();
+            subtractQuantity.setOnClickListener(v -> {
+                if(groceryListClass.productQuantity > 0){
+                    if(groceryListInterface != null){
+                        int position = getAdapterPosition();
 
-                            if(position != RecyclerView.NO_POSITION){
-                                subtractQuantity.setColorFilter(orange);
-                                groceryListInterface.onQuantitySubtract(position);
-                            }
+                        if(position != RecyclerView.NO_POSITION){
+                            subtractQuantity.setColorFilter(orange);
+                            groceryListInterface.onQuantitySubtract(position);
                         }
                     }
                 }

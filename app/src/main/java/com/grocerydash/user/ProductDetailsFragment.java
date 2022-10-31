@@ -89,7 +89,7 @@ public class ProductDetailsFragment extends Fragment{
             exitFragment();
 
             Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity)getActivity()).productQuantity + "x " +
-                    productName + " has been added to your list!", BaseTransientBottomBar.LENGTH_SHORT).show();
+                    productName + " has been added to your list!", 750).show();
         });
 
         setUpProductDetails();
