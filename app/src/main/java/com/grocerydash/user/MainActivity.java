@@ -29,14 +29,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface{
+public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface, RecommendedProductInterface{
     int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns, numberOfRows;
     double totalPrice;
     String[] mapLayout, searchHints;
     String searchString, productCategory, productName;
     ArrayList<GroceryListClass> groceryList;
     ArrayList<CategoryClass> productCategoryList;
-    ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList;
+    ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList, recommendedProductList;
     ArrayList<StoreLayoutClass> storeLayoutList;
     ArrayList<ArrayList<StoreLayoutClass>> graphEdges;
     ImageButton imageButtonHome, imageButtonCart, imageButtonBack;
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     CategorizedProductsAdapter categorizedProductsAdapter;
     GroceryListAdapter groceryListAdapter;
     StoreLayoutAdapter storeLayoutAdapter;
+    RecommendedProductAdapter recommendedProductAdapter;
     FragmentManager fragmentManager;
     FrameLayout layout;
     FirebaseFirestore db;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         filteredProductList = new ArrayList<>();
         popularProductList = new ArrayList<>();
         categorizedProductList = new ArrayList<>();
+        recommendedProductList = new ArrayList<>();
         groceryList = new ArrayList<>();
         storeLayoutList = new ArrayList<>();
         graphEdges = new ArrayList<>();
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         categorizedProductsAdapter = new CategorizedProductsAdapter(this, categorizedProductList, this);
         groceryListAdapter = new GroceryListAdapter(this, groceryList, this);
         storeLayoutAdapter = new StoreLayoutAdapter(this, storeLayoutList);
+        recommendedProductAdapter = new RecommendedProductAdapter(this, recommendedProductList, this);
 
         // Populate List Data
         readStoreLayoutFile();
@@ -440,5 +443,22 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .commit();
         closeKeyboard();
         layout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onRecommendedProductsClick(int position) {
+        currentlyAtCart = 2;
+
+        productName = recommendedProductList.get(position).getProductName();
+        productQuantity = 1;
+
+        ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
     }
 }

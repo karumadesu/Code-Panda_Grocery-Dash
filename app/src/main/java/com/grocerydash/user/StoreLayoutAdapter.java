@@ -58,12 +58,12 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
             case 5:
                 holder.tileImage.setImageResource(R.drawable.ic_goal);
                 break;
-            case 6:
-                holder.tileImage.setImageResource(R.drawable.ic_currentpath);
-                break;
-            case 7:
-                holder.tileImage.setImageResource(R.drawable.ic_previouspath);
-                break;
+//            case 6:
+//                holder.tileImage.setImageResource(R.drawable.ic_currentpath);
+//                break;
+//            case 7:
+//                holder.tileImage.setImageResource(R.drawable.ic_previouspath);
+//                break;
             case 8:
                 holder.tileImage.setImageResource(R.drawable.ic_check);
                 break;

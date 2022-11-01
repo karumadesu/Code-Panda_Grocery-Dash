@@ -2,17 +2,17 @@ package com.grocerydash.user;
 
 public class GroceryListClass {
     String productName, productImageUrl, productPrice;
-    int productQuantity, productX, productY, shelfNumber;
-    boolean isVisited;
+    int productQuantity, productX, productY, productId;
+    boolean isVisited = false;
 
-    public GroceryListClass(String productName, String productImageUrl, String productPrice, int shelfNumber, int productQuantity, int productX, int productY, boolean isVisited) {
+    public GroceryListClass(String productName, String productImageUrl, String productPrice, int productQuantity, int productX, int productY, int productId, boolean b) {
         this.productName = productName;
         this.productImageUrl = productImageUrl;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
         this.productX = productX;
         this.productY = productY;
-        this.isVisited = isVisited;
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -27,10 +27,6 @@ public class GroceryListClass {
         return productPrice;
     }
 
-    public int getShelfNumber() {
-        return shelfNumber;
-    }
-
     public int getProductQuantity() {
         return productQuantity;
     }
@@ -43,8 +39,8 @@ public class GroceryListClass {
         return productY;
     }
 
-    public boolean isVisited() {
-        return isVisited;
+    public int getProductId() {
+        return productId;
     }
 
     public void setVisited(boolean visited) {
