@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/imageview_recommended_image"
-            android:layout_width="@dimen/_55sdp"
-            android:layout_height="@dimen/_55sdp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
             android:scaleType="fitCenter" />
 
     </androidx.cardview.widget.CardView>
@@ -26,13 +26,15 @@
     <TextView
         android:id="@+id/text_recommended_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_24sdp"
         android:fontFamily="@font/arimo"
         android:text="@string/dummy_name"
-        android:textSize="@dimen/_6ssp"
+        android:textSize="@dimen/_8ssp"
         android:textStyle="bold"
         android:textColor="@color/dark_gray"
-        android:padding="@dimen/_2sdp" />
+        android:padding="@dimen/_2sdp"
+        android:ellipsize="end"
+        android:maxLines="2"/>
 
     <TextView
         android:id="@+id/text_recommended_price"
@@ -40,7 +42,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/arimo"
         android:text="@string/dummy_price"
-        android:textSize="@dimen/_6ssp"
+        android:textSize="@dimen/_7ssp"
         android:textStyle="bold"
         android:textColor="@color/orange"
         android:padding="@dimen/_2sdp"

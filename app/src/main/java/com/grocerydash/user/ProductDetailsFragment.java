@@ -103,7 +103,7 @@ public class ProductDetailsFragment extends Fragment {
         });
 
         setUpProductDetails();
-        displayRecommenededProducts();
+        displayRecommendedProducts();
     }
 
     public void setUpProductDetails() {
@@ -176,7 +176,7 @@ public class ProductDetailsFragment extends Fragment {
                 .commit();
     }
 
-    public void displayRecommenededProducts() {
+    public void displayRecommendedProducts() {
         ((MainActivity)getActivity()).recommendedProductList.clear();
         CollectionReference recommendedProducts = db.collection("BranchName_Transactions").document(((MainActivity) getActivity()).productName)
                 .collection("Frequently_Bought_Item");
@@ -193,7 +193,7 @@ public class ProductDetailsFragment extends Fragment {
                             }
                             ((MainActivity) getActivity()).recommendedProductAdapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(getActivity(), "No data found in Database", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), "No Products Recommendations Yet", 750).show();
                             Log.d("CategoryList", "Error getting documents: ");
                         }
                     }
