@@ -43,7 +43,7 @@ public class ProductDetailsFragment extends Fragment {
     Button buttonAddToList;
     String productName, productPrice, productImageUrl;
     String[] productX, productY, productShelf;
-    int productXLocation, productYLocation, productShelfNumber;
+    int productXLocation, productYLocation, productShelfNumber, productId;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Nullable
@@ -94,7 +94,7 @@ public class ProductDetailsFragment extends Fragment {
             if (((MainActivity) getActivity()).productQuantity > 0) {
                 ((MainActivity) getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
                         productPrice, productShelfNumber, ((MainActivity) getActivity()).productQuantity,
-                        productXLocation, productYLocation, false));
+                        productXLocation, productYLocation, productId, false));
             }
             exitFragment();
 
@@ -118,6 +118,7 @@ public class ProductDetailsFragment extends Fragment {
                 productXLocation = Integer.parseInt(productX[0]);
                 productYLocation = Integer.parseInt(productY[0]);
                 productShelfNumber = Integer.parseInt(productShelf[0]);
+                productId = i.getProductId();
 
                 for (Iterator<GroceryListClass> iterator = ((MainActivity) getActivity()).groceryList.iterator(); iterator.hasNext(); ) {
                     GroceryListClass j = iterator.next();
