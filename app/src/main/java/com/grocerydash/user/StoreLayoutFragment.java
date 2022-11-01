@@ -290,7 +290,7 @@ public class StoreLayoutFragment extends Fragment {
             for(StoreLayoutClass i : storeLayout){
                 getCosts(i);
 
-                if(i.tileImage == 1 || i.tileImage == 2 || i.tileImage == 3 || i.tileImage == 9){
+                if(i.tileImage == 1 || i.tileImage == 2 || i.tileImage == 3){
                     i.setAsSolid();
                 }
             }
@@ -389,7 +389,7 @@ public class StoreLayoutFragment extends Fragment {
             for(StoreLayoutClass i : storeLayout){
                 getCosts(i);
 
-                if(i.tileImage == 1 || i.tileImage == 2 || i.tileImage == 3 || i.tileImage == 9){
+                if(i.tileImage == 1 || i.tileImage == 2 || i.tileImage == 3){
                     i.setAsSolid();
                 }
             }
@@ -556,7 +556,7 @@ public class StoreLayoutFragment extends Fragment {
                     for(StoreLayoutClass j : storeLayout){
                         getCosts(j);
 
-                        if(j.tileImage == 1 || j.tileImage == 2 || j.tileImage == 3 || j.tileImage == 9){
+                        if(j.tileImage == 1 || j.tileImage == 2 || j.tileImage == 3){
                             j.setAsSolid();
                         }
                     }
@@ -652,7 +652,7 @@ public class StoreLayoutFragment extends Fragment {
                     for(StoreLayoutClass j : storeLayout){
                         getCosts(j);
 
-                        if(j.tileImage == 1 || j.tileImage == 2 || j.tileImage == 3 || j.tileImage == 9){
+                        if(j.tileImage == 1 || j.tileImage == 2 || j.tileImage == 3){
                             j.setAsSolid();
                         }
                     }
@@ -743,7 +743,7 @@ public class StoreLayoutFragment extends Fragment {
                                     for(StoreLayoutClass l : storeLayout){
                                         getCosts(l);
 
-                                        if(l.tileImage == 1 || l.tileImage == 2 || l.tileImage == 3 || l.tileImage == 9){
+                                        if(l.tileImage == 1 || l.tileImage == 2 || l.tileImage == 3){
                                             l.setAsSolid();
                                         }
                                     }
@@ -837,7 +837,7 @@ public class StoreLayoutFragment extends Fragment {
                                     for(StoreLayoutClass l : storeLayout){
                                         getCosts(l);
 
-                                        if(l.tileImage == 1 || l.tileImage == 2 || l.tileImage == 3|| l.tileImage == 9){
+                                        if(l.tileImage == 1 || l.tileImage == 2 || l.tileImage == 3){
                                             l.setAsSolid();
                                         }
                                     }

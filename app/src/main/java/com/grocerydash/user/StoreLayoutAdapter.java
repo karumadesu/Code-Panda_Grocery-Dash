@@ -67,9 +67,6 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
             case 8:
                 holder.tileImage.setImageResource(R.drawable.ic_check);
                 break;
-            default:
-                holder.tileImage.setImageResource(R.drawable.ic_blank);
-                break;
         }
 
 //        holder.f.setText(String.valueOf(storeLayoutClass.fCost));
