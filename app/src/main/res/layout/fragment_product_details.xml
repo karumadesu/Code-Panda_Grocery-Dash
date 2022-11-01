@@ -8,9 +8,15 @@
     android:background="@color/background"
     tools:context=".ProductDetailsFragment">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:id="@+id/linearLayout_path"
@@ -20,7 +26,7 @@
             android:padding="@dimen/_8sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" >
+            app:layout_constraintRight_toRightOf="parent">
 
             <TextView
                 android:id="@+id/textView_rootPath"
@@ -195,22 +201,24 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/button_addToList"
+            app:layout_constraintTop_toBottomOf="@id/layout_suggestion"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:gravity="center"
-            android:paddingBottom="@dimen/_8sdp">
+            android:paddingBottom="@dimen/_8sdp"
+            android:paddingTop="@dimen/_8sdp">
 
             <ImageButton
                 android:id="@+id/imageButton_remove"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="@dimen/_32sdp"
                 android:backgroundTint="@color/transparent"
-                app:tint="@color/sub_text"
-                android:src="@drawable/baseline_indeterminate_check_box_black_48"/>
+                android:src="@drawable/baseline_indeterminate_check_box_black_48"
+                app:tint="@color/sub_text" />
 
             <TextView
                 android:id="@+id/textView_productQuantity"
@@ -249,8 +257,10 @@
             android:padding="0dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/linear_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>
