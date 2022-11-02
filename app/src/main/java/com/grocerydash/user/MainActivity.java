@@ -369,15 +369,6 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .commit();
     }
 
-    // Function to Refresh Product Details Fragment
-    public void updateQuantity(){
-        ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
-        fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
-                .commit();
-    }
-
     @Override
     public void onCategorizedProductClick(int position) {
         currentlyAtCart = 2;
@@ -458,8 +449,6 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         fragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.frameLayout_withSearchView, productDetailsFragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
                 .commit();
     }
 }

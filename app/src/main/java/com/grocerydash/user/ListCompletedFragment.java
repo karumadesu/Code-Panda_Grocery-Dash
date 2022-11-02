@@ -67,7 +67,6 @@ public class ListCompletedFragment extends Fragment {
         for (GroceryListClass i : ((MainActivity) getActivity()).groceryList) {
             for (GroceryListClass j : ((MainActivity) getActivity()).groceryList) {
                 if (i.getProductName().equals(j.getProductName())) {
-                    Toast.makeText(getActivity(), "skip", Toast.LENGTH_SHORT).show();
                 } else {
 
                     String productName = j.getProductName();

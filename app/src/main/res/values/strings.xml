@@ -6,9 +6,10 @@
     <string name="product_detail_in_stock">In Stock</string>
     <string name="product_detail_out_of_stock">Out of Stock</string>
     <string name="product_categories">Product Categories</string>
-    <string name="recommendation">You may also like…</string>
+    <string name="recommendation">Customers who bought this also bought:</string>
     <string name="add_to_list">Add to List</string>
     <string name="dummy_name">Product Name</string>
+    <string name="dummy_name_2">Product\nName</string>
     <string name="dummy_price">₱99.99</string>
     <string name="root_directory"><u>Grocery Dash</u></string>
     <string name="my_shopping_list">My Shopping List</string>

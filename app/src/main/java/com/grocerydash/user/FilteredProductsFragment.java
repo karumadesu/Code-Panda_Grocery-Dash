@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 
 public class FilteredProductsFragment extends Fragment{
     TextView textViewNoProducts;
-    ImageView easterEgg;
     RecyclerView recyclerViewSearchProducts;
     LinearLayoutManager layout;
 
@@ -41,18 +40,13 @@ public class FilteredProductsFragment extends Fragment{
         recyclerViewSearchProducts.setAdapter(((MainActivity)getActivity()).filteredProductsAdapter);
 
         textViewNoProducts = view.findViewById(R.id.text_no_product_found);
-        easterEgg = view.findViewById(R.id.easter_egg);
 
         setUpFilteredList();
     }
 
     private void setUpFilteredList(){
         for(ProductInformationClass i: ((MainActivity)getActivity()).productList){
-            if(((MainActivity)getActivity()).searchString.toLowerCase().equals("matlab")){
-                recyclerViewSearchProducts.setVisibility(View.GONE);
-                easterEgg.setVisibility(View.VISIBLE);
-            }
-            else if(i.getProductName().toLowerCase().contains(((MainActivity)getActivity()).searchString.toLowerCase())){
+            if(i.getProductName().toLowerCase().contains(((MainActivity)getActivity()).searchString.toLowerCase())){
                 ((MainActivity)getActivity()).filteredProductList.add(i);
             }
         }
