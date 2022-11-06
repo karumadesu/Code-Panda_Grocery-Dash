@@ -135,90 +135,81 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
         // Implement Home Button Listeners
         imageButtonHome = findViewById(R.id.image_button_logo);
-        imageButtonHome.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                if(currentlyAtCart == 1 || currentlyAtCart == 3){
-                    currentlyAtCart = 0;
+        imageButtonHome.setOnClickListener(v -> {
+            if(currentlyAtCart == 1 || currentlyAtCart == 3){
+                currentlyAtCart = 0;
 
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
-                            .replace(R.id.frameLayout_noSearchView, new Fragment())
-                            .commit();
+                fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                        .replace(R.id.frameLayout_noSearchView, new Fragment())
+                        .commit();
 
-                    HomeFragment homeFragment = new HomeFragment();
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
-                            .replace(R.id.frameLayout_withSearchView, homeFragment)
-                            .commit();
-                }
-                else if(currentlyAtCart == 2){
-                    currentlyAtCart = 0;
+                HomeFragment homeFragment12 = new HomeFragment();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                        .replace(R.id.frameLayout_withSearchView, homeFragment12)
+                        .commit();
+            }
+            else if(currentlyAtCart == 2){
+                currentlyAtCart = 0;
 
-                    HomeFragment homeFragment = new HomeFragment();
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
-                            .replace(R.id.frameLayout_withSearchView, homeFragment)
-                            .commit();
-                    closeKeyboard();
-                    layout.setVisibility(View.GONE);
-                    searchViewSearchProducts.setQuery("", false);
-                    searchViewSearchProducts.clearFocus();
-                }
+                HomeFragment homeFragment12 = new HomeFragment();
+                fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                        .replace(R.id.frameLayout_withSearchView, homeFragment12)
+                        .commit();
+                closeKeyboard();
+                layout.setVisibility(View.GONE);
+                searchViewSearchProducts.setQuery("", false);
+                searchViewSearchProducts.clearFocus();
             }
         });
 
         // Implement Cart Button Listeners
         imageButtonCart = findViewById(R.id.image_button_cart);
-        imageButtonCart.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                if(currentlyAtCart != 1) {
-                    currentlyAtCart = 1;
+        imageButtonCart.setOnClickListener(v -> {
+            if(currentlyAtCart != 1) {
+                currentlyAtCart = 1;
 
-                    GroceryListFragment groceryListFragment = new GroceryListFragment();
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
-                            .replace(R.id.frameLayout_noSearchView, groceryListFragment)
-                            .commit();
+                GroceryListFragment groceryListFragment = new GroceryListFragment();
+                fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_bottom, R.anim.enter_from_bottom, R.anim.exit_to_top)
+                        .replace(R.id.frameLayout_noSearchView, groceryListFragment)
+                        .commit();
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(() -> fragmentManager.beginTransaction()
-                            .replace(R.id.frameLayout_withSearchView, new Fragment())
-                            .commit(), 500);
+                Handler handler = new Handler();
+                handler.postDelayed(() -> fragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout_withSearchView, new Fragment())
+                        .commit(), 500);
 
-                    closeKeyboard();
-                    layout.setVisibility(View.VISIBLE);
-                }
+                closeKeyboard();
+                layout.setVisibility(View.VISIBLE);
             }
         });
 
         // Implement Back Button Listeners
         imageButtonBack = findViewById(R.id.imageButton_back);
-        imageButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(currentlyAtCart == 3){
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
-                            .replace(R.id.frameLayout_noSearchView, new Fragment())
-                            .commit();
+        imageButtonBack.setOnClickListener(v -> {
+            if(currentlyAtCart == 3){
+                fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                        .replace(R.id.frameLayout_noSearchView, new Fragment())
+                        .commit();
 
-                    HomeFragment homeFragment = new HomeFragment();
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
-                            .replace(R.id.frameLayout_withSearchView, homeFragment)
-                            .commit();
-                }
-                else{
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.popBackStack();
-                    closeKeyboard();
-                }
+                HomeFragment homeFragment1 = new HomeFragment();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_bottom, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_bottom)
+                        .replace(R.id.frameLayout_withSearchView, homeFragment1)
+                        .commit();
+            }
+            else{
+                fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStack();
+                closeKeyboard();
             }
         });
     }

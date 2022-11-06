@@ -16,16 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
 public class StoreLayoutFragment extends Fragment {
     int counter, edgeCount, columnCount, rowCount, currentShelfNumber, nextShelfNumber, currentTileX, currentTileY, entranceTile, prevStartImage, prevGoalImage;
@@ -86,7 +81,7 @@ public class StoreLayoutFragment extends Fragment {
                 goalTile.setTileImage(6);
 
                 counter--;
-                updateView();
+                aStarAlgorithm();
             }
         });
 
@@ -96,12 +91,8 @@ public class StoreLayoutFragment extends Fragment {
             goalTile.isGoalTile = false;
 
             counter++;
-            updateView();
+            aStarAlgorithm();
         });
-
-//        ((MainActivity)getActivity()).imageButtonHome.setOnClickListener(v -> {
-//            search();
-//        });
 
         nearestNeighborAlgorithm();
         twoOptAlgorithm();
@@ -110,7 +101,7 @@ public class StoreLayoutFragment extends Fragment {
         ((MainActivity)getActivity()).graphEdges.clear();
         ((MainActivity)getActivity()).readStoreLayoutFile();
 
-        updateView();
+        aStarAlgorithm();
     }
 
     public void getCosts(StoreLayoutClass tile){
@@ -144,38 +135,119 @@ public class StoreLayoutFragment extends Fragment {
 
             if(current != startTile){
                 edgePath.add(current);
-                current.setAsPath();
-                ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((current.tileXCoordinate * columnCount) + current.tileYCoordinate);
             }
         }
 
-        Collections.reverse(edgePath);
-        ((MainActivity)getActivity()).graphEdges.add(edgePath);
+        if(!edgePath.isEmpty()){
+            Collections.reverse(edgePath);
+        }
+
+        for(int i = 0; i < edgePath.size(); i++){
+            for(int j = 0; j < edgePath.size(); j++){
+                if(edgePath.get(i).tileXCoordinate == edgePath.get(j).tileXCoordinate && (Math.abs(edgePath.get(i).tileYCoordinate - edgePath.get(j).tileYCoordinate) > 1)){
+                    int iterator = i;
+                    int newCount = 0;
+                    int bestCount = 0;
+                    int counterY = edgePath.get(i).tileYCoordinate;
+                    boolean hasObstacle = false;
+
+                    while(edgePath.get(iterator) != edgePath.get(j)){
+                        if(i > j){
+                            iterator--;
+                        }
+                        else{
+                            iterator++;
+                        }
+
+                        bestCount++;
+                    }
+
+                    while(counterY != edgePath.get(j).tileYCoordinate){
+                        if (storeLayout.get((edgePath.get(i).tileXCoordinate * columnCount) + counterY).isSolidTile) {
+                            hasObstacle = true;
+                            break;
+                        }
+
+                        if(counterY < edgePath.get(j).tileYCoordinate){
+                            counterY++;
+                        }
+                        else{
+                            counterY--;
+                        }
+
+                        newCount++;
+                    }
+
+                    if(!hasObstacle && (newCount < bestCount)){
+                        int k = i;
+
+                        while(edgePath.get(k).tileYCoordinate != edgePath.get(j).tileYCoordinate){
+                            int previousY = edgePath.get(k).tileYCoordinate;
+
+                            if(counterY < edgePath.get(j).tileYCoordinate){
+                                k++;
+                            }
+                            else{
+                                k--;
+                            }
+
+                            if(previousY == edgePath.get(k).tileYCoordinate){
+                                Log.d("", "Removed (" + edgePath.get(k).tileXCoordinate + ", " + edgePath.get(k).tileYCoordinate + ").");
+                                edgePath.remove(k);
+                            }
+                            else{
+                                Log.d("", "Updated (" + edgePath.get(k).tileXCoordinate + ", " +
+                                        edgePath.get(k).tileYCoordinate + ") to (" + edgePath.get(j).tileXCoordinate + ", " +
+                                        edgePath.get(k).tileYCoordinate + ")");
+                                edgePath.get(k).setTileXCoordinate(edgePath.get(j).tileXCoordinate);
+                            }
+                        }
+
+                        for(StoreLayoutClass s : edgePath){
+                            Log.d("", "(" + s.tileXCoordinate + ", " + s.tileYCoordinate + ")");
+                        }
+                    }
+                    else{
+                        break;
+                    }
+                }
+            }
+        }
+
+        for(StoreLayoutClass i : edgePath){
+            storeLayout.get((i.tileXCoordinate * columnCount) + i.tileYCoordinate).setAsPath();
+            ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((i.tileXCoordinate * columnCount) + i.tileYCoordinate);
+        }
+
+        if(!edgePath.isEmpty()){
+            ((MainActivity)getActivity()).graphEdges.add(edgePath);
+        }
 
         goalTile.isGoalTile = false;
         startTile.isStartingTile = false;
     }
 
     public void search(){
-        while(!goalReached){
-            int x = currentTile.tileXCoordinate;
-            int y = currentTile.tileYCoordinate;
+        if(currentTile != goalTile){
+            while(!goalReached){
+                int x = currentTile.tileXCoordinate;
+                int y = currentTile.tileYCoordinate;
 
-            currentTile.setAsClosed();
-            openList.remove(currentTile);
+                currentTile.setAsClosed();
+                openList.remove(currentTile);
 
-            if(x - 1 >= 0){
-                openTile(storeLayout.get(((x - 1) * columnCount) + y));
-            }
-            if(y - 1 >= 0){
-                openTile(storeLayout.get((x * columnCount) + (y - 1)));
-            }
-            if(x + 1 < rowCount){
-                openTile(storeLayout.get(((x + 1) * columnCount) + y));
-            }
-            if(y + 1 < columnCount){
-                openTile(storeLayout.get((x * columnCount) + (y + 1)));
-            }
+                if(x - 1 >= 0){
+                    openTile(storeLayout.get(((x - 1) * columnCount) + y));
+                }
+                if(y - 1 >= 0){
+                    openTile(storeLayout.get((x * columnCount) + (y - 1)));
+                }
+                if(x + 1 < rowCount){
+                    openTile(storeLayout.get(((x + 1) * columnCount) + y));
+                }
+                if(y + 1 < columnCount){
+                    openTile(storeLayout.get((x * columnCount) + (y + 1)));
+                }
 //            if(x - 1 >= 0 && y - 1 >= 0){
 //                openTile(storeLayout.get(((x - 1) * columnCount) + (y - 1)));
 //            }
@@ -189,26 +261,27 @@ public class StoreLayoutFragment extends Fragment {
 //                openTile(storeLayout.get(((x - 1) * columnCount) + (y + 1)));
 //            }
 
-            int bestTileIndex = 0;
-            double bestTileCost = 9999;
+                int bestTileIndex = 0;
+                double bestTileCost = 9999;
 
-            for(int i = 0; i < openList.size(); i++){
-                if(openList.get(i).fCost < bestTileCost){
-                    bestTileIndex = i;
-                    bestTileCost = openList.get(i).fCost;
-                }
-                else if(openList.get(i).fCost == bestTileCost){
-                    if(openList.get(i).gCost < openList.get(bestTileIndex).gCost){
+                for(int i = 0; i < openList.size(); i++){
+                    if(openList.get(i).fCost < bestTileCost){
                         bestTileIndex = i;
+                        bestTileCost = openList.get(i).fCost;
+                    }
+                    else if(openList.get(i).fCost == bestTileCost){
+                        if(openList.get(i).gCost < openList.get(bestTileIndex).gCost){
+                            bestTileIndex = i;
+                        }
                     }
                 }
-            }
 
-            currentTile = openList.get(bestTileIndex);
+                currentTile = openList.get(bestTileIndex);
 
-            if(currentTile == goalTile){
-                goalReached = true;
-                backTrack();
+                if(currentTile == goalTile){
+                    goalReached = true;
+                    backTrack();
+                }
             }
         }
     }
@@ -237,7 +310,7 @@ public class StoreLayoutFragment extends Fragment {
         }
     }
 
-    public void updateView(){
+    public void aStarAlgorithm(){
         if(counter == 0){
             nextItem = groceryList.get(counter);
             nextShelfNumber = ((nextItem.getProductX() * columnCount) + nextItem.getProductY());
@@ -248,36 +321,44 @@ public class StoreLayoutFragment extends Fragment {
             ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged(entranceTile);
 
             goalTile = storeLayout.get(nextShelfNumber);
-            if(goalTile.tileImage == 1 || goalTile.tileImage == 3){
+            if(goalTile.tileImage == 1 || goalTile.tileImage == 2 || goalTile.tileImage == 3){
                 if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 1
-                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
+                        && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 2
+                        && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
                 }
                 else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
                 }
                 else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                     goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
                 }
                 else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                     goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
                 }
@@ -308,36 +389,44 @@ public class StoreLayoutFragment extends Fragment {
             nextShelfNumber = ((nextItem.getProductX() * columnCount) + nextItem.getProductY());
 
             startTile = storeLayout.get(currentShelfNumber);
-            if(startTile.tileImage == 1 || startTile.tileImage == 3){
+            if(startTile.tileImage == 1 || startTile.tileImage == 2 || startTile.tileImage == 3){
                 if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 1
+                        && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 2
                         && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 3){
                     startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY());
                 }
                 else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 1
+                        && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 2
                         && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 3){
                     startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY());
                 }
                 else if(storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                     startTile = storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1));
                 }
                 else if(storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                     startTile = storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                     startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                     startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                     startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1));
                 }
                 else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                     startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1));
                 }
@@ -347,36 +436,44 @@ public class StoreLayoutFragment extends Fragment {
             ((MainActivity)getActivity()).storeLayoutAdapter.notifyItemChanged((startTile.tileXCoordinate * columnCount) + startTile.tileYCoordinate);
 
             goalTile = storeLayout.get(nextShelfNumber);
-            if(goalTile.tileImage == 1 || goalTile.tileImage == 3){
+            if(goalTile.tileImage == 1 || goalTile.tileImage == 2 || goalTile.tileImage == 3){
                 if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
                 }
                 else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
                 }
                 else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                     goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
                 }
                 else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                     goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
                 }
                 else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                        && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                         && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                     goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
                 }
@@ -413,7 +510,7 @@ public class StoreLayoutFragment extends Fragment {
             nextButton.setText("Next");
             nextButton.setOnClickListener(w -> {
                 counter++;
-                updateView();
+                aStarAlgorithm();
             });
         }
         else{
@@ -515,36 +612,44 @@ public class StoreLayoutFragment extends Fragment {
                     currentTile = startTile;
 
                     goalTile = storeLayout.get(nextShelfNumber);
-                    if(goalTile.tileImage == 1 || goalTile.tileImage == 3){
+                    if(goalTile.tileImage == 1 || goalTile.tileImage == 2 || goalTile.tileImage == 3){
                         if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
                         }
                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
                         }
                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
                         }
                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
                         }
@@ -573,36 +678,44 @@ public class StoreLayoutFragment extends Fragment {
                     nextShelfNumber = ((nextItem.getProductX() * columnCount) + nextItem.getProductY());
 
                     startTile = storeLayout.get(currentShelfNumber);
-                    if(startTile.tileImage == 1 || startTile.tileImage == 3){
+                    if(startTile.tileImage == 1 || startTile.tileImage == 2 || startTile.tileImage == 3){
                         if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 1
+                                && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 2
                                 && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 3){
                             startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY());
                         }
                         else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 1
+                                && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 2
                                 && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 3){
                             startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY());
                         }
                         else if(storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                             startTile = storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1));
                         }
                         else if(storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                             startTile = storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                             startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                             startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                             startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1));
                         }
                         else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                             startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1));
                         }
@@ -611,36 +724,44 @@ public class StoreLayoutFragment extends Fragment {
                     currentTile = startTile;
 
                     goalTile = storeLayout.get(nextShelfNumber);
-                    if(goalTile.tileImage == 1 || goalTile.tileImage == 3){
+                    if(goalTile.tileImage == 1 || goalTile.tileImage == 2 || goalTile.tileImage == 3){
                         if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
                         }
                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
                         }
                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
                         }
                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
                         }
                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
                         }
@@ -702,36 +823,44 @@ public class StoreLayoutFragment extends Fragment {
                                     currentTile = startTile;
 
                                     goalTile = storeLayout.get(nextShelfNumber);
-                                    if(goalTile.tileImage == 1 || goalTile.tileImage == 3){
+                                    if(goalTile.tileImage == 1 || goalTile.tileImage == 2 || goalTile.tileImage == 3){
                                         if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
                                         }
                                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
                                         }
                                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
                                         }
@@ -761,34 +890,42 @@ public class StoreLayoutFragment extends Fragment {
 
                                     startTile = storeLayout.get(currentShelfNumber);
                                     if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 1
+                                            && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 2
                                             && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY()).tileImage != 3){
                                         startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + currentItem.getProductY());
                                     }
                                     else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 1
+                                            && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 2
                                             && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY()).tileImage != 3){
                                         startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + currentItem.getProductY());
                                     }
                                     else if(storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                                            && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                                             && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                                         startTile = storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() + 1));
                                     }
                                     else if(storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                                            && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                                             && storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                                         startTile = storeLayout.get((currentItem.getProductX() * columnCount) + (currentItem.getProductY() - 1));
                                     }
                                     else if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                                            && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                                             && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                                         startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() - 1));
                                     }
                                     else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 1
+                                            && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 2
                                             && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1)).tileImage != 3){
                                         startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() - 1));
                                     }
                                     else if(storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                                            && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                                             && storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                                         startTile = storeLayout.get(((currentItem.getProductX() + 1) * columnCount) + (currentItem.getProductY() + 1));
                                     }
                                     else if(storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 1
+                                            && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 2
                                             && storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1)).tileImage != 3){
                                         startTile = storeLayout.get(((currentItem.getProductX() - 1) * columnCount) + (currentItem.getProductY() + 1));
                                     }
@@ -796,36 +933,44 @@ public class StoreLayoutFragment extends Fragment {
                                     currentTile = startTile;
 
                                     goalTile = storeLayout.get(nextShelfNumber);
-                                    if(goalTile.tileImage == 1 || goalTile.tileImage == 3){
+                                    if(goalTile.tileImage == 1 || goalTile.tileImage == 2 || goalTile.tileImage == 3){
                                         if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
                                         }
                                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
                                         }
                                         else if(storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                                && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                                 && storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                                             goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
                                         }
                                         else if(storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 1
+                                                && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 2
                                                 && storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage != 3){
                                             goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
                                         }

@@ -82,17 +82,12 @@ public class ProductDetailsFragment extends Fragment {
         ((MainActivity) getActivity()).imageButtonBack.setVisibility(View.VISIBLE);
 
         imageButtonAddQuantity.setOnClickListener(v -> {
-            ((MainActivity) getActivity()).productQuantity++;
+            ((MainActivity)getActivity()).productQuantity++;
             imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.orange));
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run(){
-                    imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.sub_text));
-                }
-            }, 100);
+            handler.postDelayed(() -> imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.sub_text)), 100);
 
-            textViewProductQuantity.setText(String.valueOf(((MainActivity) getActivity()).productQuantity));
+            textViewProductQuantity.setText(String.valueOf(((MainActivity)getActivity()).productQuantity));
             if (((MainActivity) getActivity()).productQuantity == 0){
                 buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_gray)));
                 buttonAddToList.setText("Return to Home");
@@ -108,12 +103,7 @@ public class ProductDetailsFragment extends Fragment {
                 ((MainActivity) getActivity()).productQuantity--;
                 imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.orange));
                 Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run(){
-                        imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.sub_text));
-                    }
-                }, 100);
+                handler.postDelayed(() -> imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.sub_text)), 100);
 
                 textViewProductQuantity.setText(String.valueOf(((MainActivity) getActivity()).productQuantity));
                 if (((MainActivity) getActivity()).productQuantity == 0){
@@ -171,33 +161,30 @@ public class ProductDetailsFragment extends Fragment {
 
                 textViewProductName.setText(i.getProductName());
                 textViewProductPrice.setText("₱" + i.getProductPrice());
+                textViewProductQuantity.setText(String.valueOf(((MainActivity)getActivity()).productQuantity));
                 productCategoryPath.setText(i.getProductCategory());
                 productCategoryPath.setPaintFlags(productCategoryPath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 productNamePath.setText(i.getProductName());
                 productNamePath.setPaintFlags(productNamePath.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 Picasso.get().load(String.valueOf(i.getProductImageUrl())).resize(360, 360).centerCrop().into(productImage);
 
-                if (((MainActivity) getActivity()).productQuantity == 0) {
+                if (((MainActivity)getActivity()).productQuantity == 0) {
                     imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                 } else {
                     imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.icon));
                 }
 
-                textViewProductQuantity.setText(String.valueOf(((MainActivity) getActivity()).productQuantity));
                 if (i.getProductInStock() == 0) {
-                    buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_gray)));
-                    buttonAddToList.setText("Return to Home");
-                }
-
-                if (i.getProductInStock() == 0) {
-                    ((MainActivity) getActivity()).productQuantity = 0;
-
+                    ((MainActivity)getActivity()).productQuantity = 0;
+                    textViewProductQuantity.setText(String.valueOf(((MainActivity) getActivity()).productQuantity));
                     productStock.setText("Out of Stock");
                     productStock.setTextColor(getResources().getColor(R.color.red));
                     imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                     imageButtonAddQuantity.setClickable(false);
                     imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                     imageButtonSubtractQuantity.setClickable(false);
+                    buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.sub_text)));
+                    buttonAddToList.setText("Return to Home");
                 } else {
                     productStock.setText("In Stock");
                     productStock.setTextColor(getResources().getColor(R.color.sub_text));
@@ -217,33 +204,28 @@ public class ProductDetailsFragment extends Fragment {
 
     public void displayRecommendedProducts() {
         ((MainActivity)getActivity()).recommendedProductList.clear();
-        CollectionReference recommendedProducts = db.collection("BranchName_Transactions").document(((MainActivity) getActivity()).productName)
+        CollectionReference recommendedProducts = db
+                .collection("BranchName_Transactions")
+                .document(((MainActivity)getActivity()).productName)
                 .collection("Frequently_Bought_Item");
         recommendedProducts.whereArrayContains("productRecommendedTo", productName)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            for (DocumentSnapshot d : list) {
-                                ProductInformationClass info = d.toObject(ProductInformationClass.class);
-                                ((MainActivity) getActivity()).recommendedProductList.add(info);
-                            }
-                            ((MainActivity) getActivity()).recommendedProductAdapter.notifyDataSetChanged();
-                        } else {
-                            linearLayoutRecommended.setVisibility(View.INVISIBLE);
-                            Log.d("CategoryList", "Error getting documents: ");
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot d : list) {
+                            ProductInformationClass info = d.toObject(ProductInformationClass.class);
+                            ((MainActivity) getActivity()).recommendedProductList.add(info);
                         }
+                        ((MainActivity) getActivity()).recommendedProductAdapter.notifyDataSetChanged();
+                    } else {
+                        linearLayoutRecommended.setVisibility(View.INVISIBLE);
+                        Log.d("CategoryList", "Error getting documents: ");
                     }
-
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // if we do not get any data or any error we are displaying
-                        // a toast message that we do not get any data
-                        Toast.makeText(getActivity(), "Fail to get the data.", Toast.LENGTH_SHORT).show();
-                    }
+                }).addOnFailureListener(e -> {
+                    // if we do not get any data or any error we are displaying
+                    // a toast message that we do not get any data
+                    Toast.makeText(getActivity(), "Fail to get the data.", Toast.LENGTH_SHORT).show();
                 });
     }
 }
