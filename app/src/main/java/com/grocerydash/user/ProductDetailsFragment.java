@@ -79,54 +79,77 @@ public class ProductDetailsFragment extends Fragment {
         buttonAddToList = view.findViewById(R.id.button_addToList);
         linearLayoutRecommended = view.findViewById(R.id.layout_suggestion);
 
-        ((MainActivity) getActivity()).imageButtonBack.setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).imageButtonBack.setVisibility(View.VISIBLE);
 
         imageButtonAddQuantity.setOnClickListener(v -> {
             ((MainActivity)getActivity()).productQuantity++;
-            imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.orange));
+            imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
             Handler handler = new Handler();
-            handler.postDelayed(() -> imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.sub_text)), 100);
+            handler.postDelayed(() -> imageButtonAddQuantity.setColorFilter(getResources().getColor(R.color.orange)), 200);
 
             textViewProductQuantity.setText(String.valueOf(((MainActivity)getActivity()).productQuantity));
-            if (((MainActivity) getActivity()).productQuantity == 0){
+            if (((MainActivity) getActivity()).productQuantity == 1){
                 buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_gray)));
-                buttonAddToList.setText("Return to Home");
-            }
-            else{
-                buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
-                buttonAddToList.setText("Add to List");
+                buttonAddToList.setText("•");
+                buttonAddToList.setClickable(false);
+                handler.postDelayed(() -> buttonAddToList.setText("• •"), 300);
+                handler.postDelayed(() -> buttonAddToList.setText("• • •"), 600);
+                handler.postDelayed(() -> {
+                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.orange));
+                    buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
+                    buttonAddToList.setText("Add to List");
+                    buttonAddToList.setClickable(true);
+                }, 900);
             }
         });
 
         imageButtonSubtractQuantity.setOnClickListener(v -> {
             if (((MainActivity) getActivity()).productQuantity > 0) {
                 ((MainActivity) getActivity()).productQuantity--;
-                imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.orange));
+                imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                 Handler handler = new Handler();
-                handler.postDelayed(() -> imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.sub_text)), 100);
 
                 textViewProductQuantity.setText(String.valueOf(((MainActivity) getActivity()).productQuantity));
                 if (((MainActivity) getActivity()).productQuantity == 0){
+                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                     buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_gray)));
-                    buttonAddToList.setText("Return to Home");
+                    buttonAddToList.setText("•");
+                    buttonAddToList.setClickable(false);
+                    handler.postDelayed(() -> buttonAddToList.setText("• •"), 300);
+                    handler.postDelayed(() -> buttonAddToList.setText("• • •"), 600);
+                    handler.postDelayed(() -> {
+                        buttonAddToList.setText("Return to Home");
+                        buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
+                        buttonAddToList.setClickable(true);
+                    }, 900);
                 }
                 else{
-                    buttonAddToList.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
-                    buttonAddToList.setText("Add to List");
+                    handler.postDelayed(() -> imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.orange)), 200);
                 }
             }
         });
 
         buttonAddToList.setOnClickListener(v -> {
-            if (((MainActivity) getActivity()).productQuantity > 0) {
-                ((MainActivity) getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
-                        productPrice, productShelfNumber, ((MainActivity) getActivity()).productQuantity,
-                        productXLocation, productYLocation, productId, false));
+            if (((MainActivity)getActivity()).productQuantity > 0) {
+                boolean onList = false;
+
+                for(GroceryListClass i : ((MainActivity)getActivity()).groceryList){
+                    if(productName.equals(i.productName)){
+                        i.productQuantity += ((MainActivity)getActivity()).productQuantity;
+                        onList = true;
+                    }
+                }
+
+                if(!onList){
+                    ((MainActivity) getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
+                            productPrice, productShelfNumber, ((MainActivity) getActivity()).productQuantity,
+                            productXLocation, productYLocation, productId, false));
+                }
             }
-            exitFragment();
+            getActivity().getSupportFragmentManager().popBackStack();
 
             if(((MainActivity)getActivity()).productQuantity != 0){
-                Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity) getActivity()).productQuantity + "x " +
+                Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity)getActivity()).productQuantity + "x " +
                         productName + " has been added to your list!", 750).show();
             }
         });
@@ -149,16 +172,6 @@ public class ProductDetailsFragment extends Fragment {
                 productShelfNumber = Integer.parseInt(productShelf[0]);
                 productId = i.getProductId();
 
-                for (Iterator<GroceryListClass> iterator = ((MainActivity) getActivity()).groceryList.iterator(); iterator.hasNext(); ) {
-                    GroceryListClass j = iterator.next();
-
-                    if (j.getProductName().equals(productName)) {
-                        iterator.remove();
-                        ((MainActivity) getActivity()).productQuantity = j.getProductQuantity();
-                        ((MainActivity) getActivity()).groceryList.remove(j);
-                    }
-                }
-
                 textViewProductName.setText(i.getProductName());
                 textViewProductPrice.setText("₱" + i.getProductPrice());
                 textViewProductQuantity.setText(String.valueOf(((MainActivity)getActivity()).productQuantity));
@@ -171,7 +184,7 @@ public class ProductDetailsFragment extends Fragment {
                 if (((MainActivity)getActivity()).productQuantity == 0) {
                     imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.light_gray));
                 } else {
-                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.icon));
+                    imageButtonSubtractQuantity.setColorFilter(getResources().getColor(R.color.orange));
                 }
 
                 if (i.getProductInStock() == 0) {
@@ -193,21 +206,13 @@ public class ProductDetailsFragment extends Fragment {
         }
     }
 
-    public void exitFragment() {
-        HomeFragment homeFragment = new HomeFragment();
-
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
-                .replace(R.id.frameLayout_withSearchView, homeFragment)
-                .commit();
-    }
-
     public void displayRecommendedProducts() {
         ((MainActivity)getActivity()).recommendedProductList.clear();
         CollectionReference recommendedProducts = db
                 .collection("BranchName_Transactions")
                 .document(((MainActivity)getActivity()).productName)
                 .collection("Frequently_Bought_Item");
+
         recommendedProducts.whereArrayContains("productRecommendedTo", productName)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {

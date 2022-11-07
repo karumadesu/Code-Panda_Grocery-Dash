@@ -544,6 +544,11 @@ public class FixedGridLayoutManager extends RecyclerView.LayoutManager {
             public float calculateSpeedPerPixel(DisplayMetrics displayMetrics){
                 return 200f / displayMetrics.densityDpi;
             }
+
+            @Override
+            public int calculateDtToFit(int viewStart, int viewEnd, int boxStart, int boxEnd, int snapPreference) {
+                return (boxStart + (boxEnd - boxStart) / 2) - (viewStart + (viewEnd - viewStart) / 2);
+            }
         };
         scroller.setTargetPosition(position);
         startSmoothScroll(scroller);

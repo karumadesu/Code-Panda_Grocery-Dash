@@ -173,6 +173,8 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
             if(currentlyAtCart != 1) {
                 currentlyAtCart = 1;
 
+                imageButtonBack.setVisibility(View.INVISIBLE);
+
                 GroceryListFragment groceryListFragment = new GroceryListFragment();
                 fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
@@ -333,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         productCategory = productCategoryList.get(position).getCategoryName();
         categoryNumber = position;
 
+        imageButtonBack.setVisibility(View.VISIBLE);
         CategorizedProductsFragment categorizedProductsFragment = new CategorizedProductsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -350,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         productName = popularProductList.get(position).getProductName();
         productQuantity = 1;
 
+        imageButtonBack.setVisibility(View.VISIBLE);
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -367,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         productName = categorizedProductList.get(position).getProductName();
         productQuantity = 1;
 
+        imageButtonBack.setVisibility(View.VISIBLE);
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -385,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         productQuantity = 1;
 
         closeKeyboard();
+        imageButtonBack.setVisibility(View.VISIBLE);
         ProductDetailsFragment productDetailsFragment = new ProductDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
