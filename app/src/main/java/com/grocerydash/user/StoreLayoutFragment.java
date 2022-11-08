@@ -58,7 +58,7 @@ public class StoreLayoutFragment extends Fragment {
         storeLayout = ((MainActivity)getActivity()).storeLayoutList;
         groceryList = ((MainActivity)getActivity()).groceryList;
         solidTileImages = new int[] {
-                1, 1007, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1206, 1305, 1306,
+                1, 8, 9, 10, 1007, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1206, 1305, 1306,
                 1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1505, 1506, 1509, 1605, 1606,
                 1705, 1706, 1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 1905, 1906, 2005,
                 2006, 2101, 2102, 2103, 2104, 2105, 2106, 2107, 2108, 2205, 2206, 2306, 2401,
