@@ -208,6 +208,7 @@ public class ProductDetailsFragment extends Fragment {
 
     public void displayRecommendedProducts() {
         ((MainActivity)getActivity()).recommendedProductList.clear();
+
         CollectionReference recommendedProducts = db
                 .collection("BranchName_Transactions")
                 .document(((MainActivity)getActivity()).productName)
@@ -216,21 +217,19 @@ public class ProductDetailsFragment extends Fragment {
         recommendedProducts.whereArrayContains("productRecommendedTo", productName)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
+                    if(!queryDocumentSnapshots.isEmpty()) {
                         List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+
                         for (DocumentSnapshot d : list) {
                             ProductInformationClass info = d.toObject(ProductInformationClass.class);
-                            ((MainActivity) getActivity()).recommendedProductList.add(info);
+                            ((MainActivity)getActivity()).recommendedProductList.add(info);
                         }
+
                         ((MainActivity) getActivity()).recommendedProductAdapter.notifyDataSetChanged();
-                    } else {
-                        linearLayoutRecommended.setVisibility(View.INVISIBLE);
-                        Log.d("CategoryList", "Error getting documents: ");
                     }
-                }).addOnFailureListener(e -> {
-                    // if we do not get any data or any error we are displaying
-                    // a toast message that we do not get any data
-                    Toast.makeText(getActivity(), "Fail to get the data.", Toast.LENGTH_SHORT).show();
-                });
+                    else {
+                        linearLayoutRecommended.setVisibility(View.INVISIBLE);
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Error in retrieving data.", Toast.LENGTH_SHORT).show());
     }
 }
