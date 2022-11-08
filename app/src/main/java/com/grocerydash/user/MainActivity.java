@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
 
         // Implement Search Field Listeners
         searchViewSearchProducts = findViewById(R.id.search_view_searchProducts);
-        searchViewSearchProducts.setQueryHint(searchHints[(int) Math.random() * 10]);
+        searchViewSearchProducts.setQueryHint(searchHints[(int)(Math.random() * 27 + 1)]);
         searchViewSearchProducts.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query){

@@ -78,17 +78,39 @@
     </string-array>
 
     <string-array name="searchHints">
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
+        <item>Beef Cubes, Sirloin Tips, Adobo Cut</item>
+        <item>Thigh Fillet, Leg Quarter, Chicken Fingers</item>
+        <item>Pampano, Tulingan, Bisugo</item>
+        <item>Watermelon, Apples, Bananas</item>
+        <item>Onion, Tomato, Lettuce</item>
+        <item>Fresh Milk, Fortified Milk, Chocolate Milk</item>
+        <item>Alaska, Bear Brand, Milo</item>
+        <item>Yogurt, Vitamilk, Yakult</item>
+        <item>Coke, Sprite, Royal</item>
+        <item>Century Tuna, Spam, Mega</item>
+        <item>Nestle, Magnolia, Selecta</item>
+        <item>Noodles, Wheat Bread, Rice</item>
+        <item>Zonrox, Mr. Clean, Lysol</item>
+        <item>Surf, Tide, Ariel</item>
+        <item>Tender Juicy, Idol, CDO</item>
+        <item>Sausages, Ham, Bacon</item>
+        <item>Absolute, Nature\'s Spring, Wilkins</item>
+        <item>Gatorade, Red Bull, Monster Energy</item>
+        <item>Safeguard, Dove, Cetaphil</item>
+        <item>Sunsilk, Head &amp; Shoulders, Palmolive</item>
+        <item>Soy Sauce, Vinegar, Ground Pepper</item>
+        <item>Diaper, Baby Bottle, Baby Oil</item>
+        <item>Pet Leash, Cat Food, Water Bowl</item>
+        <item>Piattos, Nova, Roller Coaster</item>
+        <item>Lays, Ruffles, Doritos</item>
+        <item>Cotton Buds, Lotion, Sunblock</item>
+        <item>Moisturizer, Deodorant, Cologne</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="store_list">
+        <item>SM Savemore Market Laon-Laan</item>
+        <item>SM Savemore Market Kanlaon</item>
+        <item>SM Hypermarket Sun Mall</item>
+    </string-array>
+
 </resources>
