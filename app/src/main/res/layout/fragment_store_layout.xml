@@ -39,7 +39,7 @@
             android:id="@+id/layout_placeholder"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_152sdp"
+            android:layout_height="@dimen/_164sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
@@ -57,15 +57,14 @@
 
             <RelativeLayout
                 android:id="@+id/relativeLayout_productInformation"
-                android:layout_width="@dimen/_256sdp"
+                android:layout_width="@dimen/_240sdp"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/_16sdp">
+                android:layout_centerHorizontal="true">
 
                 <ImageView
                     android:id="@+id/imageView_currentProductImage"
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_width="@dimen/_64sdp"
+                    android:layout_height="@dimen/_64sdp"
                     android:layout_centerVertical="true"/>
 
                 <RelativeLayout
@@ -79,9 +78,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_16sdp"
-                        android:text="@string/dummy_name"
+                        android:text="@string/dummy_name_2"
                         android:textStyle="bold"
-                        android:textSize="@dimen/_16sdp"
+                        android:textSize="@dimen/_16ssp"
                         android:textColor="@color/dark_gray"
                         android:fontFamily="@font/arimo"
                         android:ellipsize="end"
@@ -93,8 +92,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/textView_currentProductName"
                         android:layout_marginLeft="@dimen/_16sdp"
-                        android:text="@string/dummy_name"
-                        android:textSize="@dimen/_12sdp"
+                        android:text="@string/dummy_name_2"
+                        android:textSize="@dimen/_12ssp"
                         android:textColor="@color/light_gray"
                         android:fontFamily="@font/arimo"
                         android:ellipsize="end"
@@ -105,9 +104,38 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/linearLayout_currentPrice"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/relativeLayout_productInformation"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/_4sdp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/arimo"
+                    android:text="Current Total:"
+                    android:textColor="@color/header_text"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:id="@+id/textView_runningPrice"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/arimo"
+                    android:gravity="center"
+                    android:text="@string/dummy_price"
+                    android:textColor="@color/orange"
+                    android:textSize="@dimen/_16ssp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLayout_currentPrice"
                 android:layout_centerInParent="true">
 
                 <Button

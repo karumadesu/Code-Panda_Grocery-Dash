@@ -28,10 +28,11 @@ public class StoreLayoutFragment extends Fragment {
     int counter, edgeCount, columnCount, rowCount, currentShelfNumber, nextShelfNumber, entranceTile;
     int[] solidTileImages;
     boolean goalReached;
+    double runningPrice;
     GroceryListClass currentItem, nextItem;
     ArrayList <StoreLayoutClass> storeLayout, openList;
     ArrayList <GroceryListClass> groceryList;
-    TextView textViewCurrentProductName, textViewNextProductName;
+    TextView textViewCurrentProductName, textViewNextProductName, textViewRunningPrice;
     ImageView imageViewCurrentProductImage;
     ImageButton positionButton;
     Button previousButton, nextButton;
@@ -51,6 +52,7 @@ public class StoreLayoutFragment extends Fragment {
 
         counter = 0;
         edgeCount = 0;
+        runningPrice = 0;
         entranceTile = 4373;
         goalReached = false;
         columnCount = ((MainActivity)getActivity()).numberOfColumns;
@@ -82,6 +84,9 @@ public class StoreLayoutFragment extends Fragment {
         textViewNextProductName = view.findViewById(R.id.textView_nextProductName);
         imageViewCurrentProductImage = view.findViewById(R.id.imageView_currentProductImage);
 
+        textViewRunningPrice = view.findViewById(R.id.textView_runningPrice);
+        textViewRunningPrice.setText("₱" + String.format("%.2f", runningPrice));
+
         fixedGridLayoutManager = new FixedGridLayoutManager();
         fixedGridLayoutManager.setTotalColumnCount(((MainActivity)getActivity()).numberOfColumns);
 
@@ -99,6 +104,7 @@ public class StoreLayoutFragment extends Fragment {
                 goalTile.setTileImage(6);
 
                 counter--;
+                runningPrice -= Double.parseDouble(currentItem.getProductPrice()) * currentItem.getProductQuantity();
                 aStarAlgorithm();
             }
         });
@@ -108,6 +114,7 @@ public class StoreLayoutFragment extends Fragment {
             startTile.isStartingTile = false;
             goalTile.isGoalTile = false;
 
+            runningPrice += Double.parseDouble(nextItem.getProductPrice()) * nextItem.getProductQuantity();
             counter++;
             aStarAlgorithm();
         });
@@ -467,6 +474,9 @@ public class StoreLayoutFragment extends Fragment {
                 .centerCrop()
                 .into(imageViewCurrentProductImage);
 
+        textViewRunningPrice.setText("₱" + String.format("%.2f", runningPrice));
+        Log.d("", "" + runningPrice);
+
         // Update Bottom Sheet Product Details
         if(counter + 1 < ((MainActivity)getActivity()).groceryList.size()){
             textViewCurrentProductName.setText(nextItem.getProductName());
@@ -476,6 +486,10 @@ public class StoreLayoutFragment extends Fragment {
             nextButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.orange)));
             nextButton.setText("Next");
             nextButton.setOnClickListener(w -> {
+                startTile.isStartingTile = false;
+                goalTile.isGoalTile = false;
+
+                runningPrice += Double.parseDouble(nextItem.getProductPrice()) * nextItem.getProductQuantity();
                 counter++;
                 aStarAlgorithm();
             });
