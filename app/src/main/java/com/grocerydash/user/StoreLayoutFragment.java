@@ -475,7 +475,6 @@ public class StoreLayoutFragment extends Fragment {
                 .into(imageViewCurrentProductImage);
 
         textViewRunningPrice.setText("₱" + String.format("%.2f", runningPrice));
-        Log.d("", "" + runningPrice);
 
         // Update Bottom Sheet Product Details
         if(counter + 1 < ((MainActivity)getActivity()).groceryList.size()){

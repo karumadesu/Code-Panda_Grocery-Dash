@@ -5,26 +5,29 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 public class GroceryListFragment extends Fragment {
-    TextView totalPrice, listEmpty;
+    TextView totalPrice, listEmpty, budget;
     Button backButton, goButton;
     RecyclerView recyclerViewGroceryList;
     LinearLayoutManager layout;
-
 
     @Nullable
     @Override
@@ -39,8 +42,40 @@ public class GroceryListFragment extends Fragment {
         layout = new LinearLayoutManager(getActivity());
         layout.setOrientation(RecyclerView.VERTICAL);
 
-        totalPrice = view.findViewById(R.id.textView_groceryListTotalPrice);
         listEmpty = view.findViewById(R.id.textView_groceryListEmpty);
+
+        budget = view.findViewById(R.id.textView_groceryListBudget);
+        budget.setText("₱" + String.format("%.2f", ((MainActivity)getActivity()).budget));
+        budget.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Set a budget for your list");
+
+            EditText input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            FrameLayout frame = new FrameLayout(getActivity());
+            FrameLayout.LayoutParams parameters = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            parameters.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+            parameters.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+            input.setLayoutParams(parameters);
+
+            frame.addView(input);
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                ((MainActivity) getActivity()).budget = Double.parseDouble(input.getText().toString());
+                budget.setText("₱" + String.format("%.2f", ((MainActivity)getActivity()).budget));
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder.setView(frame);
+            builder.show();
+        });
+
+        totalPrice = view.findViewById(R.id.textView_groceryListTotalPrice);
+        totalPrice.setText("₱" + String.format("%.2f", ((MainActivity)getActivity()).totalPrice));
+        if(((MainActivity)getActivity()).totalPrice > ((MainActivity)getActivity()).budget){
+            totalPrice.setTextColor(getResources().getColor(R.color.red));
+        }
+        else{
+            totalPrice.setTextColor(getResources().getColor(R.color.green));
+        }
 
         recyclerViewGroceryList = view.findViewById(R.id.recyclerView_shoppingList);
         recyclerViewGroceryList.setLayoutManager(layout);
@@ -82,19 +117,7 @@ public class GroceryListFragment extends Fragment {
             goButton.setClickable(true);
         }
 
-        calculateTotalPrice();
         checkListContent();
-    }
-
-    public void calculateTotalPrice(){
-        double total = 0.00;
-
-        for(GroceryListClass i : ((MainActivity)getActivity()).groceryList){
-            total += Double.parseDouble(i.getProductPrice()) * (double) i.getProductQuantity();
-        }
-
-        totalPrice.setText("₱" + String.format("%.2f", total));
-        ((MainActivity)getActivity()).totalPrice = total;
     }
 
     public void checkListContent(){

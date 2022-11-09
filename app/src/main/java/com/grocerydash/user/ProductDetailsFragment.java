@@ -1,5 +1,6 @@
 package com.grocerydash.user;
 
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -7,17 +8,20 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -130,27 +134,63 @@ public class ProductDetailsFragment extends Fragment {
         });
 
         buttonAddToList.setOnClickListener(v -> {
-            if (((MainActivity)getActivity()).productQuantity > 0) {
-                boolean onList = false;
+            if((((MainActivity)getActivity()).totalPrice + (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity)) > ((MainActivity)getActivity()).budget){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Adding this item to your list will make you exceed your budget. Continue adding?");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    if (((MainActivity)getActivity()).productQuantity > 0) {
+                        boolean onList = false;
 
-                for(GroceryListClass i : ((MainActivity)getActivity()).groceryList){
-                    if(productName.equals(i.productName)){
-                        i.productQuantity += ((MainActivity)getActivity()).productQuantity;
-                        onList = true;
+                        for(GroceryListClass i : ((MainActivity)getActivity()).groceryList){
+                            if(productName.equals(i.productName)){
+                                i.productQuantity += ((MainActivity)getActivity()).productQuantity;
+                                onList = true;
+                            }
+                        }
+
+                        if(!onList){
+                            ((MainActivity) getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
+                                    productPrice, productShelfNumber, ((MainActivity) getActivity()).productQuantity,
+                                    productXLocation, productYLocation, productId, false));
+                        }
+                    }
+                    getActivity().getSupportFragmentManager().popBackStack();
+
+                    if(((MainActivity)getActivity()).productQuantity != 0){
+                        Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity)getActivity()).productQuantity + "x " +
+                                productName + " has been added to your list!", 750).show();
+                    }
+
+                    ((MainActivity)getActivity()).totalPrice += (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity);
+                });
+                builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+                builder.show();
+            }
+            else{
+                if (((MainActivity)getActivity()).productQuantity > 0) {
+                    boolean onList = false;
+
+                    for(GroceryListClass i : ((MainActivity)getActivity()).groceryList){
+                        if(productName.equals(i.productName)){
+                            i.productQuantity += ((MainActivity)getActivity()).productQuantity;
+                            onList = true;
+                        }
+                    }
+
+                    if(!onList){
+                        ((MainActivity) getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
+                                productPrice, productShelfNumber, ((MainActivity) getActivity()).productQuantity,
+                                productXLocation, productYLocation, productId, false));
                     }
                 }
+                getActivity().getSupportFragmentManager().popBackStack();
 
-                if(!onList){
-                    ((MainActivity) getActivity()).groceryList.add(new GroceryListClass(productName, productImageUrl,
-                            productPrice, productShelfNumber, ((MainActivity) getActivity()).productQuantity,
-                            productXLocation, productYLocation, productId, false));
+                if(((MainActivity)getActivity()).productQuantity != 0){
+                    Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity)getActivity()).productQuantity + "x " +
+                            productName + " has been added to your list!", 750).show();
                 }
-            }
-            getActivity().getSupportFragmentManager().popBackStack();
 
-            if(((MainActivity)getActivity()).productQuantity != 0){
-                Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity)getActivity()).productQuantity + "x " +
-                        productName + " has been added to your list!", 750).show();
+                ((MainActivity)getActivity()).totalPrice += (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity);
             }
         });
 
@@ -159,8 +199,8 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     public void setUpProductDetails() {
-        for (ProductInformationClass i : ((MainActivity) getActivity()).productList) {
-            if (i.getProductName().equals(((MainActivity) getActivity()).productName)) {
+        for(ProductInformationClass i : ((MainActivity)getActivity()).productList){
+            if(i.getProductName().equals(((MainActivity)getActivity()).productName)){
                 productName = i.getProductName();
                 productPrice = i.getProductPrice();
                 productImageUrl = i.getProductImageUrl();

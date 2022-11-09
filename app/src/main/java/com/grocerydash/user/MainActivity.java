@@ -1,16 +1,22 @@
 package com.grocerydash.user;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.AssetManager;
+import android.nfc.cardemulation.HostNfcFService;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SearchView;
@@ -31,7 +37,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface, RecommendedProductInterface{
     int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns, numberOfRows;
-    double totalPrice;
+    double totalPrice, budget;
     String[] mapLayout, searchHints;
     String searchString, productCategory, productName;
     ArrayList<GroceryListClass> groceryList;
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         setContentView(R.layout.activity_main);
 
         // Create Instances
+        totalPrice = 0;
+        budget = 0;
         currentlyAtCart = 0;
         numberOfColumns = 57;
         numberOfRows = 79;
@@ -214,6 +222,26 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 closeKeyboard();
             }
         });
+
+        // Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Set a budget for your list");
+
+        EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        FrameLayout frame = new FrameLayout(this);
+        FrameLayout.LayoutParams parameters = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        parameters.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+        parameters.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+        input.setLayoutParams(parameters);
+
+        frame.addView(input);
+        builder.setPositiveButton("OK", (dialog, which) -> budget = Double.parseDouble(input.getText().toString()));
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.setView(frame);
+
+        Handler handler = new Handler();
+        handler.postDelayed(builder::show, 1500);
     }
 
     // Function to Retrieve All Products from Database
@@ -404,6 +432,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     @Override
     public void onQuantityAdd(int position) {
         groceryList.get(position).productQuantity++;
+        totalPrice += Double.parseDouble(groceryList.get(position).productPrice);
 
         GroceryListFragment groceryListFragment = new GroceryListFragment();
         fragmentManager = getSupportFragmentManager();
@@ -417,6 +446,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     @Override
     public void onQuantitySubtract(int position) {
         if(groceryList.get(position).productQuantity > 0){
+            totalPrice -= Double.parseDouble(groceryList.get(position).productPrice);
             groceryList.get(position).productQuantity--;
 
             if(groceryList.get(position).productQuantity == 0){

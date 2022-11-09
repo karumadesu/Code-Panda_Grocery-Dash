@@ -79,11 +79,10 @@
                 app:cardElevation="0dp"
                 app:cardCornerRadius="8dp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical"
                     android:background="@drawable/bg_white_rounded_rectangle"
                     android:backgroundTint="@color/card_background"
                     android:paddingStart="0dp"
@@ -92,26 +91,81 @@
                     android:paddingTop="@dimen/_16sdp"
                     android:paddingBottom="@dimen/_16sdp">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:id="@+id/linearLayout_estimatedTotal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/estimated_total_cost"
-                        android:textSize="@dimen/_12ssp"
-                        android:textColor="@color/sub_text"
-                        android:fontFamily="@font/arimo"
-                        android:gravity="center"/>
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/divider">
 
-                    <TextView
-                        android:id="@+id/textView_groceryListTotalPrice"
-                        android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/estimated_total_cost"
+                            android:textSize="@dimen/_11ssp"
+                            android:textColor="@color/sub_text"
+                            android:fontFamily="@font/arimo"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/textView_groceryListTotalPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dummy_price"
+                            android:textSize="@dimen/_24ssp"
+                            android:textColor="@color/green"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/arimo"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/_64sdp"
+                        android:background="@color/divider"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/linearLayout_budget"
+                        app:layout_constraintLeft_toRightOf="@id/linearLayout_estimatedTotal" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_budget"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_price"
-                        android:textSize="@dimen/_32ssp"
-                        android:textColor="@color/orange"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/arimo"
-                        android:gravity="center"/>
-                </LinearLayout>
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/divider"
+                        app:layout_constraintRight_toRightOf="parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Budget Limit"
+                            android:textSize="@dimen/_11ssp"
+                            android:textColor="@color/sub_text"
+                            android:fontFamily="@font/arimo"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/textView_groceryListBudget"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dummy_price"
+                            android:textSize="@dimen/_24ssp"
+                            android:textColor="@color/orange"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/arimo"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 

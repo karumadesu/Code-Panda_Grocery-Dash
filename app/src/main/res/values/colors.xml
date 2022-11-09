@@ -14,7 +14,7 @@
     <color name="orange">#FFFF6347</color>
     <color name="light_gray_2">#FFDDDDDD</color>
     <color name="off_white">#FFEFEFEF</color>
-    <color name="red">#FFFF0000</color>
+    <color name="red">#FFFE5F55</color>
     <color name="green">#FF3DDC4A</color>
 
     <color name="header_text">#FF050505</color>
@@ -23,4 +23,5 @@
     <color name="icon">#FF65676B</color>
     <color name="sub_text">#FF65676B</color>
     <color name="card_background">#FFF5F5FA</color>
+    <color name="divider">#FFE5E7EE</color>
 </resources>

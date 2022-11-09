@@ -44,7 +44,7 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
                 holder.tileImage.setImageResource(R.drawable.tile_floor);
                 break;
             case 1:
-                holder.tileImage.setImageResource(R.drawable.tile_wall);
+                holder.tileImage.setImageResource(R.drawable.tile_wall_1);
                 break;
             case 4:
                 holder.tileImage.setImageResource(R.drawable.tile_user);
@@ -57,15 +57,6 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
                 break;
             case 7:
                 holder.tileImage.setImageResource(R.drawable.tile_previouspath);
-                break;
-            case 8:
-                holder.tileImage.setImageResource(R.drawable.tile_cashier);
-                break;
-            case 9:
-                holder.tileImage.setImageResource(R.drawable.tile_cashier_5);
-                break;
-            case 10:
-                holder.tileImage.setImageResource(R.drawable.tile_cashier_6);
                 break;
             case 11:
                 holder.tileImage.setImageResource(R.drawable.tile_1_a);
@@ -336,6 +327,30 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
                 break;
             case 239:
                 holder.tileImage.setImageResource(R.drawable.tile_23_j);
+                break;
+            case 241:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowdown_1);
+                break;
+            case 242:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowdown_2);
+                break;
+            case 243:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowdown_3);
+                break;
+            case 244:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowdown_4);
+                break;
+            case 245:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowdown_5);
+                break;
+            case 246:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowdown_6);
+                break;
+            case 247:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowdown_7);
+                break;
+            case 257:
+                holder.tileImage.setImageResource(R.drawable.tile_arrowup_7);
                 break;
             case 1007:
                 holder.tileImage.setImageResource(R.drawable.tile_milk_7);
@@ -783,6 +798,132 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
                 break;
             case 5308:
                 holder.tileImage.setImageResource(R.drawable.tile_gondola_8);
+                break;
+            case 5402:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_2);
+                break;
+            case 5403:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_3);
+                break;
+            case 5404:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_4);
+                break;
+            case 5405:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_5);
+                break;
+            case 5406:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_6);
+                break;
+            case 5407:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_7);
+                break;
+            case 5408:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_8);
+                break;
+            case 5409:
+                holder.tileImage.setImageResource(R.drawable.tile_wall_9);
+                break;
+            case 5501:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_1);
+                break;
+            case 5502:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_2);
+                break;
+            case 5503:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_3);
+                break;
+            case 5504:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_4);
+                break;
+            case 5505:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_5);
+                break;
+            case 5506:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_6);
+                break;
+            case 5507:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_7);
+                break;
+            case 5508:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_8);
+                break;
+            case 5509:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_9);
+                break;
+            case 5510:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_10);
+                break;
+            case 5511:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_11);
+                break;
+            case 5512:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_12);
+                break;
+            case 5513:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_13);
+                break;
+            case 5514:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_14);
+                break;
+            case 5515:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_15);
+                break;
+            case 5516:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_16);
+                break;
+            case 5517:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_17);
+                break;
+            case 5518:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_18);
+                break;
+            case 5519:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_19);
+                break;
+            case 5520:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_20);
+                break;
+            case 5521:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_21);
+                break;
+            case 5522:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_22);
+                break;
+            case 5523:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_23);
+                break;
+            case 5524:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_24);
+                break;
+            case 5525:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_25);
+                break;
+            case 5526:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_26);
+                break;
+            case 5527:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_27);
+                break;
+            case 5528:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_28);
+                break;
+            case 5529:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_29);
+                break;
+            case 5530:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_30);
+                break;
+            case 5531:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_31);
+                break;
+            case 5532:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_32);
+                break;
+            case 5533:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_33);
+                break;
+            case 5534:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_34);
                 break;
         }
 
