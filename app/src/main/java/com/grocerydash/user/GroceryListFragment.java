@@ -62,6 +62,13 @@ public class GroceryListFragment extends Fragment {
             builder.setPositiveButton("OK", (dialog, which) -> {
                 ((MainActivity) getActivity()).budget = Double.parseDouble(input.getText().toString());
                 budget.setText("₱" + String.format("%.2f", ((MainActivity)getActivity()).budget));
+
+                if(((MainActivity)getActivity()).totalPrice > ((MainActivity)getActivity()).budget){
+                    totalPrice.setTextColor(getResources().getColor(R.color.red));
+                }
+                else{
+                    totalPrice.setTextColor(getResources().getColor(R.color.green));
+                }
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             builder.setView(frame);

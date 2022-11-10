@@ -925,6 +925,12 @@ public class StoreLayoutAdapter extends RecyclerView.Adapter<StoreLayoutAdapter.
             case 5534:
                 holder.tileImage.setImageResource(R.drawable.tile_cashier_34);
                 break;
+            case 5535:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_35);
+                break;
+            case 5536:
+                holder.tileImage.setImageResource(R.drawable.tile_cashier_36);
+                break;
         }
 
 //        holder.f.setText(String.valueOf(storeLayoutClass.fCost));
