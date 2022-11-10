@@ -2,6 +2,9 @@ package com.grocerydash.user;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -13,6 +16,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -22,7 +27,11 @@ import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,8 +45,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements CategoryInterface, PopularProductsInterface, CategorizedProductInterface, FilteredProductInterface, GroceryListInterface, RecommendedProductInterface{
-    int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns, numberOfRows;
+    int categoryNumber, productQuantity, checkPopular, currentlyAtCart, numberOfColumns, numberOfRows, itemCount;
     double totalPrice, budget;
+    boolean filterOn;
     String[] mapLayout, searchHints;
     String searchString, productCategory, productName;
     ArrayList<GroceryListClass> groceryList;
@@ -45,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList, recommendedProductList;
     ArrayList<StoreLayoutClass> storeLayoutList;
     ArrayList<ArrayList<StoreLayoutClass>> graphEdges;
-    ImageButton imageButtonHome, imageButtonCart, imageButtonBack;
+    ImageButton imageButtonHome, imageButtonCart, imageButtonBack, imageButtonFilter;
     SearchView searchViewSearchProducts;
     PopularProductsAdapter popularProductsAdapter;
     CategoryAdapter categoryAdapter;
@@ -64,11 +74,13 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         setContentView(R.layout.activity_main);
 
         // Create Instances
-        totalPrice = 0;
         budget = 0;
+        itemCount = 0;
+        totalPrice = 0;
         currentlyAtCart = 0;
         numberOfColumns = 57;
         numberOfRows = 79;
+        filterOn = false;
 
         db = FirebaseFirestore.getInstance();
         searchHints = getResources().getStringArray(R.array.searchHints);
@@ -223,6 +235,31 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
             }
         });
 
+        imageButtonFilter = findViewById(R.id.imageButton_filter);
+        imageButtonFilter.setOnClickListener(v -> {
+            if(filterOn){
+                filterOn = false;
+                imageButtonFilter.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_filter_alt_off_24, null));
+                imageButtonFilter.setColorFilter(getResources().getColor(R.color.light_gray));
+
+                setUpProductList();
+                setUpPopularProductList();
+            }
+            else{
+                if(budget != 0){
+                    filterOn = true;
+                    imageButtonFilter.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_filter_alt_24, null));
+                    imageButtonFilter.setColorFilter(getResources().getColor(R.color.orange));
+
+                    setUpBudgetedList();
+                    setUpBudgetedPopularProductList();
+                }
+                else{
+                    Snackbar.make(findViewById(R.id.coordinator_layout_main), "Please set a budget first.", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         // Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Set a budget for your list");
@@ -236,8 +273,17 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         input.setLayoutParams(parameters);
 
         frame.addView(input);
-        builder.setPositiveButton("OK", (dialog, which) -> budget = Double.parseDouble(input.getText().toString()));
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            if(input.getText().toString().equals("") || input.getText().toString().equals(" ")){
+                budget = 0;
+            }
+            else{
+                budget = Double.parseDouble(input.getText().toString());
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.cancel();
+        });
         builder.setView(frame);
 
         Handler handler = new Handler();
@@ -245,7 +291,9 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     }
 
     // Function to Retrieve All Products from Database
-    private void setUpProductList(){
+    public void setUpProductList(){
+        productList.clear();
+
         CollectionReference productCollection = db.collection("BranchName_Products");
         productCollection.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -264,7 +312,9 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     }
 
     // Function to Retrieve All Popular Products from Database
-    private void setUpPopularProductList(){
+    public void setUpPopularProductList(){
+        popularProductList.clear();
+
         CollectionReference productCollection = db.collection("BranchName_Products");
         productCollection.whereEqualTo("productInStock", 1).whereEqualTo("productPopular", 1).get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -276,8 +326,44 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                         }
                         popularProductsAdapter.notifyDataSetChanged();
                     }
-                    else{
-                        Toast.makeText(this, "No products found.", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
+    }
+
+    public void setUpBudgetedList(){
+        productList.clear();
+
+        CollectionReference productCollection = db.collection("BranchName_Products");
+        productCollection.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                        for(DocumentSnapshot d : list){
+                            ProductInformationClass info = d.toObject(ProductInformationClass.class);
+                            if(Double.parseDouble(info.getProductPrice()) <= (budget - totalPrice)){
+                                productList.add(info);
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
+    }
+
+    public void setUpBudgetedPopularProductList(){
+        popularProductList.clear();
+
+        CollectionReference productCollection = db.collection("BranchName_Products");
+        productCollection.whereEqualTo("productInStock", 1).whereEqualTo("productPopular", 1).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                        for(DocumentSnapshot d : list){
+                            ProductInformationClass info = d.toObject(ProductInformationClass.class);
+                            if(Double.parseDouble(info.getProductPrice()) <= (budget - totalPrice)){
+                                popularProductList.add(info);
+                            }
+                        }
+                        popularProductsAdapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error in retrieving data.", Toast.LENGTH_SHORT).show());
@@ -313,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     }
 
     // Function to Store All Category Information in an ArrayList
-    private void setUpProductCategoryList(){
+    public void setUpProductCategoryList(){
         String[] productCategoryNames = getResources().getStringArray(R.array.category_names);
         int[] productCategoryImages = {
                 R.drawable.ic_meat,
@@ -346,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     }
 
     // Function to Close Device Keyboard
-    private void closeKeyboard()
+    public void closeKeyboard()
     {
         View view = this.getCurrentFocus();
 
@@ -441,6 +527,11 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .commit();
         closeKeyboard();
         layout.setVisibility(View.VISIBLE);
+
+        if(filterOn){
+            setUpBudgetedList();
+            setUpBudgetedPopularProductList();
+        }
     }
 
     @Override
@@ -461,6 +552,11 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
                 .commit();
         closeKeyboard();
         layout.setVisibility(View.VISIBLE);
+
+        if(filterOn){
+            setUpBudgetedList();
+            setUpBudgetedPopularProductList();
+        }
     }
 
     @Override

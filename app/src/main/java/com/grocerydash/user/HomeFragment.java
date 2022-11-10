@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 import javax.annotation.Nullable;
 
 public class HomeFragment extends Fragment{
-    private TextView textSeeAllPopularProducts;
+    private TextView textSeeAllPopularProducts, noPopularProducts;
     private RecyclerView recyclerViewPopularProducts, recyclerViewProductCategories;
     private GridLayoutManager layout1, layout2;
     private NestedScrollView nestedScrollView;
@@ -64,5 +65,13 @@ public class HomeFragment extends Fragment{
                     .addToBackStack(null)
                     .commit();
         });
+
+        noPopularProducts = view.findViewById(R.id.text_no_product_found);
+        String[] kaomojis = getResources().getStringArray(R.array.kaomojis);
+
+        if(((MainActivity)getActivity()).popularProductList.isEmpty()){
+            noPopularProducts.setText(kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found under 'Popular Products'");
+            noPopularProducts.setVisibility(View.VISIBLE);
+        }
     }
 }

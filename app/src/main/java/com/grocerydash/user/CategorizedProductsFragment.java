@@ -50,7 +50,7 @@ public class CategorizedProductsFragment extends Fragment{
         setUpCategorizedList();
     }
 
-    private void setUpCategorizedList(){
+    public void setUpCategorizedList(){
         for(ProductInformationClass i: ((MainActivity)getActivity()).productList){
             if(((MainActivity)getActivity()).checkPopular == 1){
                 if(i.getProductPopular() == (((MainActivity)getActivity()).checkPopular)){
@@ -78,7 +78,12 @@ public class CategorizedProductsFragment extends Fragment{
         if(((MainActivity)getActivity()).categorizedProductList.isEmpty()){
             String[] kaomojis = getResources().getStringArray(R.array.kaomojis);
 
-            noProductsText.setText(kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found under '" + ((MainActivity)getActivity()).productCategory + "'");
+            if(((MainActivity)getActivity()).checkPopular == 1){
+                noProductsText.setText(kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found under 'Popular Products'");
+            }
+            else{
+                noProductsText.setText(kaomojis[(int)(Math.random() * 7)] + "\n\nNo products found under '" + ((MainActivity)getActivity()).productCategory + "'");
+            }
             noProductsText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }

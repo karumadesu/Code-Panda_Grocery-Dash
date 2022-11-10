@@ -42,10 +42,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/arimo"
-                android:textStyle="bold"
-                android:text="@string/dummy_name"
+                android:text="@string/dummy_name_2"
                 android:textColor="@color/dark_gray"
-                android:textSize="@dimen/_16ssp" />
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/text_search_product_price"

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,7 +61,7 @@ public class GroceryListFragment extends Fragment {
 
             frame.addView(input);
             builder.setPositiveButton("OK", (dialog, which) -> {
-                ((MainActivity) getActivity()).budget = Double.parseDouble(input.getText().toString());
+                ((MainActivity)getActivity()).budget = Double.parseDouble(input.getText().toString());
                 budget.setText("₱" + String.format("%.2f", ((MainActivity)getActivity()).budget));
 
                 if(((MainActivity)getActivity()).totalPrice > ((MainActivity)getActivity()).budget){
@@ -68,6 +69,20 @@ public class GroceryListFragment extends Fragment {
                 }
                 else{
                     totalPrice.setTextColor(getResources().getColor(R.color.green));
+                }
+
+                if(((MainActivity)getActivity()).budget == 0){
+                    ((MainActivity)getActivity()).filterOn = false;
+                    ((MainActivity)getActivity()).imageButtonFilter.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_filter_alt_off_24, null));
+                    ((MainActivity)getActivity()).imageButtonFilter.setColorFilter(getResources().getColor(R.color.light_gray));
+
+                    ((MainActivity)getActivity()).setUpProductList();
+                    ((MainActivity)getActivity()).setUpPopularProductList();
+                }
+
+                if(((MainActivity)getActivity()).filterOn){
+                    ((MainActivity)getActivity()).setUpBudgetedList();
+                    ((MainActivity)getActivity()).setUpBudgetedPopularProductList();
                 }
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());

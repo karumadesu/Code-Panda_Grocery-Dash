@@ -154,6 +154,14 @@ public class ProductDetailsFragment extends Fragment {
                                     productXLocation, productYLocation, productId, false));
                         }
                     }
+
+                    ((MainActivity)getActivity()).totalPrice += (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity);
+
+                    if(((MainActivity)getActivity()).filterOn){
+                        ((MainActivity)getActivity()).setUpBudgetedList();
+                        ((MainActivity)getActivity()).setUpBudgetedPopularProductList();
+                    }
+
                     getActivity().getSupportFragmentManager().popBackStack();
 
                     if(((MainActivity)getActivity()).productQuantity != 0){
@@ -161,7 +169,6 @@ public class ProductDetailsFragment extends Fragment {
                                 productName + " has been added to your list!", 750).show();
                     }
 
-                    ((MainActivity)getActivity()).totalPrice += (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
                 builder.show();
@@ -183,14 +190,20 @@ public class ProductDetailsFragment extends Fragment {
                                 productXLocation, productYLocation, productId, false));
                     }
                 }
+
+                ((MainActivity)getActivity()).totalPrice += (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity);
+
+                if(((MainActivity)getActivity()).filterOn){
+                    ((MainActivity)getActivity()).setUpBudgetedList();
+                    ((MainActivity)getActivity()).setUpBudgetedPopularProductList();
+                }
+
                 getActivity().getSupportFragmentManager().popBackStack();
 
                 if(((MainActivity)getActivity()).productQuantity != 0){
                     Snackbar.make(getActivity().findViewById(R.id.coordinator_layout_main), ((MainActivity)getActivity()).productQuantity + "x " +
                             productName + " has been added to your list!", 750).show();
                 }
-
-                ((MainActivity)getActivity()).totalPrice += (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity);
             }
         });
 

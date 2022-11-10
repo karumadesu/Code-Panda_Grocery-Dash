@@ -81,21 +81,40 @@
             android:theme="?attr/actionBarTheme"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_menu">
 
-            <SearchView
-                android:id="@+id/search_view_searchProducts"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_28sdp"
-                android:background="@drawable/bg_white_rounded"
-                android:backgroundTint="@color/search_bar"
-                android:queryBackground="@null"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginLeft="@dimen/_30sdp"
-                android:layout_marginRight="@dimen/_30sdp"
-                android:queryHint="Search"
-                android:searchIcon="@drawable/baseline_search_24"
-                android:textColor="@color/light_gray"
-                android:iconifiedByDefault="false" />
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_5sdp">
+
+                <SearchView
+                    android:id="@+id/search_view_searchProducts"
+                    android:layout_width="@dimen/_248sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:background="@drawable/bg_white_rounded"
+                    android:backgroundTint="@color/search_bar"
+                    android:iconifiedByDefault="false"
+                    android:queryBackground="@null"
+                    android:queryHint="Search"
+                    android:searchIcon="@drawable/baseline_search_24"
+                    android:textColor="@color/light_gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/imageButton_filter"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/imageButton_filter"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:backgroundTint="@color/transparent"
+                    app:tint="@color/light_gray"
+                    android:src="@drawable/baseline_filter_alt_off_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/search_view_searchProducts"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.appcompat.widget.Toolbar>
 
