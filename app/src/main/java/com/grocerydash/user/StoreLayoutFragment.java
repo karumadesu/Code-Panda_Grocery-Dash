@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class StoreLayoutFragment extends Fragment {
     int counter, edgeCount, columnCount, rowCount, currentShelfNumber, nextShelfNumber, entranceTile;
@@ -60,7 +61,7 @@ public class StoreLayoutFragment extends Fragment {
         storeLayout = ((MainActivity)getActivity()).storeLayoutList;
         groceryList = ((MainActivity)getActivity()).groceryList;
         solidTileImages = new int[] {
-                1, 8, 9, 10, 1007, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1206, 1305, 1306,
+                1, 1007, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1206, 1305, 1306,
                 1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1505, 1506, 1509, 1605, 1606,
                 1705, 1706, 1801, 1802, 1803, 1804, 1805, 1806, 1807, 1808, 1905, 1906, 2005,
                 2006, 2101, 2102, 2103, 2104, 2105, 2106, 2107, 2108, 2205, 2206, 2306, 2401,
@@ -162,6 +163,8 @@ public class StoreLayoutFragment extends Fragment {
     public void backTrack(){
         StoreLayoutClass current = goalTile;
         ArrayList<StoreLayoutClass> edgePath = new ArrayList<>();
+        ArrayList<StoreLayoutClass> edgeNodes = new ArrayList<>();
+        edgeNodes.add(current);
 
         while(current != startTile){
             current = current.parentTile;
@@ -169,10 +172,14 @@ public class StoreLayoutFragment extends Fragment {
             if(current != startTile){
                 edgePath.add(current);
             }
+            else{
+                edgeNodes.add(current);
+            }
         }
 
         if(!edgePath.isEmpty()){
             Collections.reverse(edgePath);
+            Collections.reverse(edgeNodes);
         }
 
         for(int i = 0; i < edgePath.size(); i++){
@@ -185,14 +192,14 @@ public class StoreLayoutFragment extends Fragment {
                     boolean hasObstacle = false;
 
                     while(edgePath.get(iterator) != edgePath.get(j)){
+                        bestCount++;
+
                         if(i > j){
                             iterator--;
                         }
                         else{
                             iterator++;
                         }
-
-                        bestCount++;
                     }
 
                     while(counterY != edgePath.get(j).tileYCoordinate){
@@ -214,22 +221,15 @@ public class StoreLayoutFragment extends Fragment {
                     if(!hasObstacle && (newCount < bestCount)){
                         int k = i;
 
-                        while(edgePath.get(k).tileYCoordinate != edgePath.get(j).tileYCoordinate){
-                            int previousY = edgePath.get(k).tileYCoordinate;
-
-                            if(counterY < edgePath.get(j).tileYCoordinate){
+                        while(edgePath.get(k) != edgePath.get(j)){
+                            if(k < j){
                                 k++;
                             }
                             else{
                                 k--;
                             }
 
-                            if(previousY == edgePath.get(k).tileYCoordinate){
-                                edgePath.remove(k);
-                            }
-                            else{
-                                edgePath.get(k).setTileXCoordinate(edgePath.get(j).tileXCoordinate);
-                            }
+                            edgePath.get(k).setTileXCoordinate(edgePath.get(j).tileXCoordinate);
                         }
                     }
                     else{
@@ -246,6 +246,7 @@ public class StoreLayoutFragment extends Fragment {
 
         if(!edgePath.isEmpty()){
             ((MainActivity)getActivity()).graphEdges.add(edgePath);
+            ((MainActivity)getActivity()).graphNodes.add(edgeNodes);
         }
 
         goalTile.isGoalTile = false;
@@ -742,8 +743,85 @@ public class StoreLayoutFragment extends Fragment {
                         }
 
                         if(hasCommonTile){
+                            int product1 = 0;
+                            int product2 = 0;
                             ArrayList<GroceryListClass> temp1 = new ArrayList<>(groceryList);
-                            Collections.swap(temp1, i, j);
+
+                            for(int x = 0; x < temp1.size(); x++){
+                                nextItem = temp1.get(x);
+                                nextShelfNumber = ((nextItem.getProductX() * columnCount) + nextItem.getProductY());
+                                goalTile = storeLayout.get(nextShelfNumber);
+                                if(ArrayUtils.contains(solidTileImages, goalTile.tileImage)){
+                                    if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage)){
+                                        goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage)){
+                                        goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
+                                    }
+                                }
+
+                                if(((MainActivity)getActivity()).graphNodes.get(i).get(1).tileXCoordinate == goalTile.tileXCoordinate &&
+                                ((MainActivity)getActivity()).graphNodes.get(i).get(1).tileYCoordinate == goalTile.tileYCoordinate){
+                                    product1 = x;
+                                }
+                            }
+
+                            for(int x = 0; x < temp1.size(); x++){
+                                nextItem = temp1.get(x);
+                                nextShelfNumber = ((nextItem.getProductX() * columnCount) + nextItem.getProductY());
+                                goalTile = storeLayout.get(nextShelfNumber);
+                                if(ArrayUtils.contains(solidTileImages, goalTile.tileImage)){
+                                    if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY()).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + nextItem.getProductY());
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY()).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + nextItem.getProductY());
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1)).tileImage)){
+                                        goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() + 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1)).tileImage)){
+                                        goalTile = storeLayout.get((nextItem.getProductX() * columnCount) + (nextItem.getProductY() - 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() - 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() - 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() + 1) * columnCount) + (nextItem.getProductY() + 1));
+                                    }
+                                    else if(!ArrayUtils.contains(solidTileImages ,storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1)).tileImage)){
+                                        goalTile = storeLayout.get(((nextItem.getProductX() - 1) * columnCount) + (nextItem.getProductY() + 1));
+                                    }
+                                }
+
+                                if(((MainActivity)getActivity()).graphNodes.get(j).get(0).tileXCoordinate == goalTile.tileXCoordinate &&
+                                        ((MainActivity)getActivity()).graphNodes.get(j).get(0).tileYCoordinate == goalTile.tileYCoordinate){
+                                    product2 = x;
+                                }
+                            }
+
+                            Collections.swap(temp1, product1, product2);
 
                             int newDistance = 0;
                             boolean isFirst = true;

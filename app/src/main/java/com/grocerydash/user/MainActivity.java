@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
     ArrayList<CategoryClass> productCategoryList;
     ArrayList<ProductInformationClass> productList, filteredProductList, popularProductList, categorizedProductList, recommendedProductList;
     ArrayList<StoreLayoutClass> storeLayoutList;
-    ArrayList<ArrayList<StoreLayoutClass>> graphEdges;
+    ArrayList<ArrayList<StoreLayoutClass>> graphEdges, graphNodes;
     ImageButton imageButtonHome, imageButtonCart, imageButtonBack, imageButtonFilter;
     SearchView searchViewSearchProducts;
     PopularProductsAdapter popularProductsAdapter;
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements CategoryInterface
         storeLayoutList = new ArrayList<>();
         recommendedProductList = new ArrayList<>();
         graphEdges = new ArrayList<>();
+        graphNodes = new ArrayList<>();
 
         popularProductsAdapter = new PopularProductsAdapter(this, popularProductList, this);
         categoryAdapter = new CategoryAdapter(this, productCategoryList, this);

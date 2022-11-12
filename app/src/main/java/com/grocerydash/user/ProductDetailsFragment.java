@@ -35,6 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -134,7 +135,8 @@ public class ProductDetailsFragment extends Fragment {
         });
 
         buttonAddToList.setOnClickListener(v -> {
-            if((((MainActivity)getActivity()).totalPrice + (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity)) > ((MainActivity)getActivity()).budget){
+            if((((MainActivity)getActivity()).totalPrice + (Double.parseDouble(productPrice) * ((MainActivity)getActivity()).productQuantity)) > ((MainActivity)getActivity()).budget
+                    && ((MainActivity)getActivity()).budget != 0){
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("Adding this item to your list will make you exceed your budget. Continue adding?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
@@ -267,7 +269,10 @@ public class ProductDetailsFragment extends Fragment {
                 .document(((MainActivity)getActivity()).productName)
                 .collection("Frequently_Bought_Item");
 
-        recommendedProducts.whereArrayContains("productRecommendedTo", productName)
+        recommendedProducts
+//                .whereEqualTo("productRecommendedTo", productName)
+                .whereGreaterThan("productQuantity", "1").orderBy("productQuantity", Query.Direction.DESCENDING)
+
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if(!queryDocumentSnapshots.isEmpty()) {
