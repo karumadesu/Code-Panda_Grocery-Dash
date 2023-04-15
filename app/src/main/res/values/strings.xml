@@ -1,3 +1,116 @@
 <resources>
-    <string name="app_name">GroceryDashUser</string>
+    <string name="app_name">Grocery Dash</string>
+    <string name="logo">Logo</string>
+    <string name="cart">Cart</string>
+    <string name="see_all">See All</string>
+    <string name="product_detail_in_stock">In Stock</string>
+    <string name="product_detail_out_of_stock">Out of Stock</string>
+    <string name="product_categories">Product Categories</string>
+    <string name="recommendation">Customers who bought this also bought:</string>
+    <string name="add_to_list">Add to List</string>
+    <string name="dummy_name">Product Name</string>
+    <string name="dummy_name_2">Product\nName</string>
+    <string name="dummy_price">₱99.99</string>
+    <string name="root_directory"><u>Grocery Dash</u></string>
+    <string name="my_shopping_list">My Shopping List</string>
+    <string name="estimated_total_cost">Estimated Total Cost</string>
+    <string name="ready_to_go">Ready to Go?</string>
+    <string name="back">Back</string>
+    <string name="title_popular_products">Popular Products</string>
+    <string name="description_popular_products">Grab these before supplies run out!</string>
+
+    <string-array name="category_descriptions">
+        <item>We meat the highest standards!</item>
+        <item>Which one came first?</item>
+        <item>Freshest catch from the sea!</item>
+        <item>A fruit a day keeps the doctor away!</item>
+        <item>Freshly gathered vegetables, authentic and organic!</item>
+        <item>Quick and accessible food!</item>
+        <item>Bags of happiness</item>
+        <item>To keep your bones and minds strong!</item>
+        <item>Taste the goodness of Dairy Power!</item>
+        <item>Did you know that Deli is short for Delicatessen?</item>
+        <item>Quench yourself!</item>
+        <item>I guess a pack wasn\'t enough?</item>
+        <item>Too lazy to cook huh</item>
+        <item>brrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</item>
+        <item>Stop complaining, start cooking!</item>
+        <item>If you like it fresh out of the oven!</item>
+        <item>Things for taking care of your little angel!</item>
+        <item>Maybe your crush would finally look at you</item>
+        <item>For your own humble abode!</item>
+        <item>Shouldn\'t we be worried of that 0.01% germ that remains?</item>
+        <item>For your trusted companion!</item>
+    </string-array>
+
+    <string-array name="category_names">
+        <item>Meat</item>
+        <item>Poultry</item>
+        <item>Seafood</item>
+        <item>Fruits</item>
+        <item>Vegetables</item>
+        <item>Pantry</item>
+        <item>Snacks</item>
+        <item>Milk</item>
+        <item>Dairy</item>
+        <item>Deli</item>
+        <item>Beverage</item>
+        <item>Food Service Center</item>
+        <item>Canned Goods</item>
+        <item>Frozen Goods</item>
+        <item>Cooking Essentials</item>
+        <item>Baking Needs</item>
+        <item>Baby Needs</item>
+        <item>Personal Care</item>
+        <item>Home</item>
+        <item>Cleaning Aids</item>
+        <item>Pet Items</item>
+    </string-array>
+
+    <string-array name="kaomojis">
+        <item>¯\\_(ツ)_/¯</item>
+        <item>( ･o･ )</item>
+        <item>▓▒░(°◡°)░▒▓</item>
+        <item>(×﹏×)</item>
+        <item>(ಥ﹏ಥ)</item>
+        <item>(・`ω´・)</item>
+        <item>(￣ヘ￣)</item>
+    </string-array>
+
+    <string-array name="searchHints">
+        <item>Beef Cubes, Sirloin Tips, Adobo Cut</item>
+        <item>Thigh Fillet, Leg Quarter, Chicken Fingers</item>
+        <item>Pampano, Tulingan, Bisugo</item>
+        <item>Watermelon, Apples, Bananas</item>
+        <item>Onion, Tomato, Lettuce</item>
+        <item>Fresh Milk, Fortified Milk, Chocolate Milk</item>
+        <item>Alaska, Bear Brand, Milo</item>
+        <item>Yogurt, Vitamilk, Yakult</item>
+        <item>Coke, Sprite, Royal</item>
+        <item>Century Tuna, Spam, Mega</item>
+        <item>Nestle, Magnolia, Selecta</item>
+        <item>Noodles, Wheat Bread, Rice</item>
+        <item>Zonrox, Mr. Clean, Lysol</item>
+        <item>Surf, Tide, Ariel</item>
+        <item>Tender Juicy, Idol, CDO</item>
+        <item>Sausages, Ham, Bacon</item>
+        <item>Absolute, Nature\'s Spring, Wilkins</item>
+        <item>Gatorade, Red Bull, Monster Energy</item>
+        <item>Safeguard, Dove, Cetaphil</item>
+        <item>Sunsilk, Head &amp; Shoulders, Palmolive</item>
+        <item>Soy Sauce, Vinegar, Ground Pepper</item>
+        <item>Diaper, Baby Bottle, Baby Oil</item>
+        <item>Pet Leash, Cat Food, Water Bowl</item>
+        <item>Piattos, Nova, Roller Coaster</item>
+        <item>Lays, Ruffles, Doritos</item>
+        <item>Cotton Buds, Lotion, Sunblock</item>
+        <item>Moisturizer, Deodorant, Cologne</item>
+    </string-array>
+
+    <string-array name="store_list">
+        <item>SM Savemore Market Laon-Laan</item>
+        <item>SM Savemore Market Kanlaon</item>
+        <item>SM Hypermarket Sun Mall</item>
+    </string-array>
+
 </resources>
